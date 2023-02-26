@@ -19,15 +19,13 @@ class ListItemView extends StatefulHookConsumerWidget {
   ConsumerState<ConsumerStatefulWidget> createState() => ListItemViewState();
 }
 
-class ListItemViewState extends ConsumerState<ListItemView>
-    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
+class ListItemViewState extends ConsumerState<ListItemView> {
   double preValue = 1.0;
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    useAutomaticKeepAlive(wantKeepAlive: true);
+    final vsync = useSingleTickerProvider();
     final token = useState("");
     final algorithm = useState<Algorithm>(getSha(widget.item.sha!));
     final used = useState(widget.item.used ?? 0);
@@ -35,7 +33,7 @@ class ListItemViewState extends ConsumerState<ListItemView>
       initialValue: 0,
       lowerBound: 0,
       upperBound: 1,
-      vsync: this,
+      vsync: vsync,
       duration: Duration(seconds: widget.item.time!),
     )..repeat();
     useEffect(() {
@@ -55,11 +53,15 @@ class ListItemViewState extends ConsumerState<ListItemView>
     }, [animationController.value]);
 
     getHotp() {
-      token.value = (OTP
-              .generateHOTPCodeString(algorithm: algorithm.value, widget.item.key!, used.value, isGoogle: true)
-              .split("")
-            ..insert(3, " "))
-          .join("");
+      try {
+        token.value = (OTP
+                .generateHOTPCodeString(algorithm: algorithm.value, widget.item.key!, used.value, isGoogle: true)
+                .split("")
+              ..insert(3, " "))
+            .join("");
+      } catch (err) {
+        token.value = "error";
+      }
     }
 
     useEffect(() {
@@ -68,9 +70,7 @@ class ListItemViewState extends ConsumerState<ListItemView>
       } else {
         getHotp();
       }
-      return () {
-        animationController.dispose();
-      };
+      return () {};
     }, []);
     useAnimation(animationController);
 

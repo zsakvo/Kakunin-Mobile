@@ -25,6 +25,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
   bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     final verificationItems = ref.watch(verificationItemsProvider);
     // final tokenItems = ref.watch(tokenValueProvider);
@@ -163,7 +164,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
               Navigator.of(context).pop();
               var res = Parse.uri(uriController.text);
               if (res != null) {
-                // ref.read(verificationItemsProvider.notifier).insertItem(res);
+                ref.read(verificationItemsProvider.notifier).insertItem(res);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   behavior: SnackBarBehavior.floating,
