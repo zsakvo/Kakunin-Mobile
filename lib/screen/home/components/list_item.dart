@@ -41,12 +41,16 @@ class ListItemViewState extends ConsumerState<ListItemView> {
       if (value <= preValue && widget.item.type == "TOTP") {
         final now = DateTime.now();
         final date = timezone.TZDateTime.from(now, pacificTimeZone);
-        token.value = (OTP
-                .generateTOTPCodeString(widget.item.key!, date.millisecondsSinceEpoch,
-                    algorithm: algorithm.value, isGoogle: true)
-                .split("")
-              ..insert(3, " "))
-            .join("");
+        try {
+          token.value = (OTP
+                  .generateTOTPCodeString(widget.item.key!, date.millisecondsSinceEpoch,
+                      algorithm: algorithm.value, isGoogle: true)
+                  .split("")
+                ..insert(3, " "))
+              .join("");
+        } catch (err) {
+          token.value = err.toString();
+        }
       }
       preValue = value;
       return () {};
