@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart' hide DropdownMenu, DropdownMenuEntry;
+import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/components/dropdown_menu.dart';
 import 'package:kakunin/data/models/verification_item.dart';
+import 'package:kakunin/utils/log.dart';
+import 'package:base32/base32.dart';
 
 enum VerifyType { totp, hotp }
 
@@ -23,6 +27,11 @@ class OtpViewState extends ConsumerState<OtpView> {
   final lengthController = TextEditingController(text: "6");
   final counterController = TextEditingController(text: "0");
   final shaController = TextEditingController();
+  String? nameErrorText;
+  String? keyErrorText;
+  // String? nameErrorText;
+  // String? nameErrorText;
+  bool valid = true;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -33,11 +42,8 @@ class OtpViewState extends ConsumerState<OtpView> {
             padding: const EdgeInsets.only(bottom: 24),
             child: TextField(
               controller: nameController,
-              decoration: const InputDecoration(
-                isDense: true,
-                labelText: '名称',
-                border: OutlineInputBorder(),
-              ),
+              decoration: InputDecoration(
+                  isDense: true, labelText: '名称', border: const OutlineInputBorder(), errorText: nameErrorText),
             ),
           ),
           Padding(
@@ -55,11 +61,8 @@ class OtpViewState extends ConsumerState<OtpView> {
             padding: const EdgeInsets.only(bottom: 24),
             child: TextField(
               controller: keyController,
-              decoration: const InputDecoration(
-                isDense: true,
-                labelText: '密钥',
-                border: OutlineInputBorder(),
-              ),
+              decoration: InputDecoration(
+                  isDense: true, labelText: '密钥', border: const OutlineInputBorder(), errorText: keyErrorText),
             ),
           ),
           Padding(
@@ -74,6 +77,8 @@ class OtpViewState extends ConsumerState<OtpView> {
                           labelText: '时间间隔',
                           border: OutlineInputBorder(),
                         ),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       )
                     : TextField(
                         controller: counterController,
@@ -82,6 +87,8 @@ class OtpViewState extends ConsumerState<OtpView> {
                           labelText: '计数器',
                           border: OutlineInputBorder(),
                         ),
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       ),
               ),
               const SizedBox(
@@ -95,6 +102,8 @@ class OtpViewState extends ConsumerState<OtpView> {
                     labelText: '位数',
                     border: OutlineInputBorder(),
                   ),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 ),
               ),
             ]),
@@ -130,6 +139,29 @@ class OtpViewState extends ConsumerState<OtpView> {
     );
   }
 
+  verify() {
+    if (nameController.text.isEmpty) {
+      nameErrorText = "名称不可为空";
+      valid = false;
+    } else {
+      nameErrorText = null;
+      valid = true;
+    }
+
+    if (keyController.text.isEmpty) {
+      keyErrorText = "密钥不能为空";
+    } else {
+      try {
+        base32.decodeAsHexString(keyController.text);
+        valid = true;
+      } catch (err) {
+        keyErrorText = "密钥不是有效的 Base32 编码";
+        valid = false;
+      }
+    }
+    setState(() {});
+  }
+
   submit() {
     final VerificationItem item = VerificationItem(
         type: widget.verifyType == VerifyType.totp ? "TOTP" : "HOTP",
@@ -141,7 +173,8 @@ class OtpViewState extends ConsumerState<OtpView> {
         counter: int.tryParse(counterController.text),
         used: 0,
         sha: shaController.text);
-    widget.onSubmit(item);
+    verify();
+    if (valid) widget.onSubmit(item);
   }
 
   clear() {
@@ -153,4 +186,8 @@ class OtpViewState extends ConsumerState<OtpView> {
     counterController.text = "0";
     shaController.text = "SHA1";
   }
+}
+
+checkName(String str) {
+  return str.isEmpty ? "名称不可为空" : null;
 }
