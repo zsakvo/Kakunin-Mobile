@@ -30,30 +30,6 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
-// final _defaultLightColor = ColorScheme.fromSeed(seedColor: Colors.green, brightness: Brightness.light);
-// final _defaultDarkColor = ColorScheme.fromSeed(seedColor: Colors.green, brightness: Brightness.dark);
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return DynamicColorBuilder(
-//       builder: (lightDynamic, darkDynamic) {
-//         return MaterialApp.router(
-//           theme: ThemeData(colorScheme: lightDynamic ?? _defaultLightColor, useMaterial3: true),
-//           darkTheme: ThemeData(colorScheme: darkDynamic ?? _defaultDarkColor, useMaterial3: true),
-//           routeInformationProvider: AppPages.router.routeInformationProvider,
-//           routeInformationParser: AppPages.router.routeInformationParser,
-//           routerDelegate: AppPages.router.routerDelegate,
-//           scrollBehavior: CustScroll(),
-//         );
-//       },
-//     );
-//   }
-// }
-
 class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
   @override
@@ -63,12 +39,6 @@ class MyApp extends HookConsumerWidget {
     final defaultLightColor = ColorScheme.fromSeed(seedColor: colorSeed, brightness: Brightness.light);
     final defaultDarkColor = ColorScheme.fromSeed(seedColor: colorSeed, brightness: Brightness.dark);
 
-    // useEffect(() {
-    //   ref.read(colorThemeProvider.notifier).state =
-    //       getMaterialColor(Color(spInstance.getInt("colorSeed") ?? 0xff2196f3));
-    //   return null;
-    // }, []);
-
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         if (lightDynamic == null || darkDynamic == null) {
@@ -76,12 +46,7 @@ class MyApp extends HookConsumerWidget {
         } else {
           supportMonet = true;
         }
-        // useEffect(() {
-        //   if (lightDynamic == null) {
-        //     ref.read(monetSupportProvider.notifier).state = false;
-        //     spInstance.setBool("dynamicColor", false);
-        //   }
-        // }, []);
+
         Log.e(ref.read(monetEnableProvider.notifier).state, "ltc");
         return MaterialApp.router(
           theme: ThemeData(colorScheme: (monetEnabled ? lightDynamic : null) ?? defaultLightColor, useMaterial3: true),
@@ -99,8 +64,6 @@ class MyApp extends HookConsumerWidget {
 
 final colorThemeProvider =
     StateProvider((ref) => getMaterialColor(Color(spInstance.getInt("colorSeed") ?? 0xff2196f3)));
-
-// final monetSupportProvider = StateProvider((ref) => true);
 
 final monetEnableProvider = StateProvider((ref) => spInstance.getBool("dynamicColor") ?? false);
 

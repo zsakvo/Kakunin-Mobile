@@ -44,7 +44,7 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                 onTap: () {
                   if (!supportMonet) return;
                   ref.read(monetEnableProvider.notifier).state = !monetEnabled;
-                  spInstance.setBool("dynamicColor", monetEnabled);
+                  spInstance.setBool("dynamicColor", !monetEnabled);
                 },
                 subtitle: Text(
                   "跟随系统桌面自动获取主题色",
@@ -55,7 +55,7 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                   onChanged: (value) {
                     if (!supportMonet) return;
                     ref.read(monetEnableProvider.notifier).state = !monetEnabled;
-                    spInstance.setBool("dynamicColor", monetEnabled);
+                    spInstance.setBool("dynamicColor", !monetEnabled);
                   },
                   // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
                 ),
