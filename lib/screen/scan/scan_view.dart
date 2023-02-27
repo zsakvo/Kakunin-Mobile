@@ -42,7 +42,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
                 if (res == null) {
                   openWarnDialog(context);
                 } else {
-                  // ref.read(verificationItemsProvider.notifier).insertItem(res);
+                  ref.read(verificationItemsProvider.notifier).insertItem(res);
                   GoRouter.of(context).pop(res);
                 }
               }

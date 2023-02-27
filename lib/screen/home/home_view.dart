@@ -1,15 +1,10 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
-
-import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:go_router_flow/go_router_flow.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:isar/isar.dart';
-import 'package:kakunin/data/models/verification_item.dart';
 import 'package:kakunin/screen/home/home_model.dart';
-import 'package:kakunin/utils/log.dart';
 import 'package:kakunin/utils/parse.dart';
 
 class HomeView extends StatefulHookConsumerWidget {
@@ -20,7 +15,6 @@ class HomeView extends StatefulHookConsumerWidget {
 }
 
 class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClientMixin {
-  final Isar _isar = Isar.getInstance()!;
   @override
   bool get wantKeepAlive => true;
   @override
@@ -59,7 +53,13 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
       appBar: AppBar(
         title: Transform.translate(offset: const Offset(0, -2), child: const Text("身份验证器")),
         elevation: 4,
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.settings))],
+        actions: [
+          IconButton(
+              onPressed: () {
+                GoRouter.of(context).push("/config");
+              },
+              icon: const Icon(Icons.settings))
+        ],
       ),
       body: ListView.builder(
         controller: scrollController,

@@ -29,13 +29,14 @@ class ListItemViewState extends ConsumerState<ListItemView> {
     final token = useState("");
     final algorithm = useState<Algorithm>(getSha(widget.item.sha!));
     final used = useState(widget.item.used ?? 0);
-    final animationController = useAnimationController(
+    late final animationController = useAnimationController(
       initialValue: 0,
       lowerBound: 0,
       upperBound: 1,
       vsync: vsync,
       duration: Duration(seconds: widget.item.time!),
-    )..repeat();
+    );
+
     useEffect(() {
       final value = animationController.value;
       if (value <= preValue && widget.item.type == "TOTP") {
@@ -70,7 +71,9 @@ class ListItemViewState extends ConsumerState<ListItemView> {
 
     useEffect(() {
       if (widget.item.type == "TOTP") {
-        animationController.forward();
+        final leftTime = OTP.remainingSeconds(interval: widget.item.time!) * 1.0;
+        animationController.value = (widget.item.time! - leftTime) / widget.item.time!;
+        animationController.repeat();
       } else {
         getHotp();
       }
