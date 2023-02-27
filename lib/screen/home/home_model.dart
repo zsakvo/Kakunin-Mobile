@@ -48,8 +48,9 @@ class VerificationItemsNotifier extends StateNotifier<List<ListItemView>> {
 
   updateHotp(int id, int used) {
     _isar.writeTxnSync(() {
-      var i = _isar.verificationItems.filter().idEqualTo(id).findFirstSync()!.copyWith(used: used);
-      _isar.verificationItems.putSync(i);
+      final item = _isar.verificationItems.getSync(id);
+      item!.used = used;
+      _isar.verificationItems.putSync(item);
     });
   }
 
