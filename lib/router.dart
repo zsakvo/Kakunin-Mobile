@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:kakunin/data/models/verification_item.dart';
 // import 'package:go_router_flow/go_router_flow.dart';
 import 'package:kakunin/screen/code/code_view.dart';
 import 'package:kakunin/screen/config/config_view.dart';
@@ -14,7 +15,10 @@ class AppPages {
     ),
     GoRoute(
       path: '/code',
-      builder: (context, state) => const CodeView(),
+      builder: (context, state) {
+        VerificationItem? item = state.extra as VerificationItem?;
+        return CodeView(item: item);
+      },
     ),
     GoRoute(
       path: '/scan',

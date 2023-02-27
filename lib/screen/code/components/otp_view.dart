@@ -140,7 +140,7 @@ class OtpViewState extends ConsumerState<OtpView> {
   }
 
   verify() {
-    if (nameController.text.isEmpty) {
+    if (nameController.text.trim().isEmpty) {
       nameErrorText = "名称不可为空";
       valid = false;
     } else {
@@ -185,6 +185,16 @@ class OtpViewState extends ConsumerState<OtpView> {
     lengthController.text = "6";
     counterController.text = "0";
     shaController.text = "SHA1";
+  }
+
+  setContent(VerificationItem item) {
+    nameController.text = item.name ?? "";
+    vendorController.text = item.vendor ?? "";
+    keyController.text = item.key ?? "";
+    timeController.text = item.time != null ? item.time.toString() : "30";
+    lengthController.text = item.length != null ? item.length.toString() : "6";
+    counterController.text = item.counter != null ? item.counter.toString() : "0";
+    shaController.text = item.sha ?? "SHA1";
   }
 }
 

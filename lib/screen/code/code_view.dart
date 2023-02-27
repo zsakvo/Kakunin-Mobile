@@ -14,7 +14,9 @@ import 'components/otp_view.dart';
 // enum VerifyType { totp, hotp }
 
 class CodeView extends StatefulHookConsumerWidget {
-  const CodeView({super.key});
+  const CodeView({super.key, required this.item});
+
+  final VerificationItem? item;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CodeViewState();
@@ -22,11 +24,27 @@ class CodeView extends StatefulHookConsumerWidget {
 
 class _CodeViewState extends ConsumerState<CodeView> {
   double top = 0.0;
-  final _totpKey = GlobalKey<OtpViewState>();
+  final _otpKey = GlobalKey<OtpViewState>();
   final Isar _isar = Isar.getInstance()!;
   @override
   Widget build(BuildContext context) {
     final verifyType = useState(VerifyType.totp);
+    useEffect(() {
+      final item = widget.item;
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) {
+          if (item != null) {
+            if (item.type == "TOTP") {
+              verifyType.value = VerifyType.totp;
+            } else {
+              verifyType.value = VerifyType.hotp;
+            }
+            _otpKey.currentState?.setContent(item);
+          }
+        },
+      );
+      return () {};
+    }, []);
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -46,7 +64,7 @@ class _CodeViewState extends ConsumerState<CodeView> {
               IconButton(
                   onPressed: () {
                     // ref.read(historyBooksListProvider).clear();
-                    _totpKey.currentState?.clear();
+                    _otpKey.currentState?.clear();
                   },
                   icon: const Icon(
                     Icons.refresh,
@@ -110,7 +128,7 @@ class _CodeViewState extends ConsumerState<CodeView> {
                   width: MediaQuery.of(context).size.width,
                 ),
                 OtpView(
-                  key: _totpKey,
+                  key: _otpKey,
                   verifyType: verifyType.value,
                   onSubmit: (VerificationItem item) {
                     // _isar.writeTxnSync(() {
@@ -127,7 +145,7 @@ class _CodeViewState extends ConsumerState<CodeView> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          _totpKey.currentState?.submit();
+          _otpKey.currentState?.submit();
         },
         label: Transform.translate(
           offset: const Offset(0, -1.4),

@@ -166,7 +166,7 @@ class ListItemViewState extends ConsumerState<ListItemView> {
                   ),
                   onTap: () async {
                     GoRouter.of(context).pop();
-                    GoRouter.of(context).push("/scan");
+                    GoRouter.of(context).push("/code", extra: widget.item);
                   },
                 ),
                 ListTile(
