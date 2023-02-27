@@ -106,7 +106,8 @@ class ListItemViewState extends ConsumerState<ListItemView> {
               ],
             ),
             widget.item.type == "TOTP"
-                ? SizedBox(
+                ? Container(
+                    margin: const EdgeInsets.only(right: 6),
                     width: 10,
                     height: 10,
                     child: CircularProgressIndicator(
