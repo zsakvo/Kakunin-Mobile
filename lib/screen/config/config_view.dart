@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/main.dart';
 import 'package:kakunin/utils/log.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'components/color.dart';
 
@@ -84,6 +85,34 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                         style: subTitleStyle,
                       ),
                     ),
+              Container(
+                margin: const EdgeInsets.only(top: 16),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                child: Text(
+                  "关于",
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+              ListTile(
+                contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                title: Text("项目主页", style: titleStyle),
+                subtitle: Text(
+                  "来看看不知所云的源代码，或者请我喝咖啡？",
+                  style: subTitleStyle,
+                ),
+                onTap: () async {
+                  try {
+                    await launchUrl(Uri.parse("https://github.com/zsakvo/Kakunin-Mobile"));
+                  } catch (err) {
+                    Log.e(err);
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: const Text("链接访问失败"),
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      behavior: SnackBarBehavior.floating,
+                    ));
+                  }
+                },
+              )
             ]))
           ],
         ));
