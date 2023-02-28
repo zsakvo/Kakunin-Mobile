@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/main.dart';
+import 'package:kakunin/utils/log.dart';
 
 import 'components/color.dart';
 
@@ -66,14 +67,15 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                       contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                       title: Text("选取颜色", style: titleStyle),
                       onTap: () {
-                        final colorSeed = ref.read(colorThemeProvider.notifier).state;
+                        final bakColor = ref.read(colorThemeProvider.notifier).state;
+                        final colorSeed = Color(spInstance.getInt("colorSeed") ?? 4294198070);
                         openMainColorPicker(context, colorSeed, (color) {
                           ref.read(colorThemeProvider.notifier).state = color! as MaterialColor;
                         }, () {
                           spInstance.setInt("colorSeed", ref.read(colorThemeProvider.notifier).state.value);
                           GoRouter.of(context).pop();
                         }, () {
-                          ref.read(colorThemeProvider.notifier).state = colorSeed;
+                          ref.read(colorThemeProvider.notifier).state = bakColor;
                           GoRouter.of(context).pop();
                         });
                       },

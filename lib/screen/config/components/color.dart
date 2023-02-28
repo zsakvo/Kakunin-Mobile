@@ -20,12 +20,8 @@ void _openDialog(
   );
 }
 
-void openMainColorPicker(
-    BuildContext context,
-    MaterialColor colorSeed,
-    Function(ColorSwatch<dynamic>?)? onMainColorChange,
-    void Function()? onPositive,
-    void Function()? onNegative) async {
+void openMainColorPicker(BuildContext context, Color colorSeed, Function(ColorSwatch<dynamic>?)? onMainColorChange,
+    void Function()? onPositive, void Function()? onNegative) async {
   _openDialog(
       context,
       "颜色选择器",
