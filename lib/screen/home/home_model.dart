@@ -45,7 +45,9 @@ class VerificationItemsNotifier extends StateNotifier<List<ListItemView>> {
 
   updateItem(VerificationItem item) {
     int index = state.indexWhere((element) => element.item.id == item.id);
-    state[index] = ListItemView(item: item);
+    var arr = [...state];
+    arr[index] = ListItemView(item: item);
+    state = arr;
     _isar.writeTxnSync(() {
       _isar.verificationItems.putSync(item);
     });
