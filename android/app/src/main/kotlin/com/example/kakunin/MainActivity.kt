@@ -1,4 +1,4 @@
-package com.example.kakunin
+package cc.zsakvo.otp
 
 import io.flutter.embedding.android.FlutterActivity
 
