@@ -28,7 +28,8 @@ class ListItemViewState extends ConsumerState<ListItemView> {
     final vsync = useSingleTickerProvider();
     final token = useState("");
     final algorithm = useState<Algorithm>(getSha(widget.item.sha!));
-    final used = useState(widget.item.used ?? 0);
+    final counter = useState(widget.item.counter ?? 0);
+    final extraStr = (widget.item.vendor != null && widget.item.vendor!.isNotEmpty) ? " (${widget.item.vendor})" : "";
     late final animationController = useAnimationController(
       initialValue: 0,
       lowerBound: 0,
@@ -60,7 +61,7 @@ class ListItemViewState extends ConsumerState<ListItemView> {
     getHotp() {
       try {
         token.value = (OTP
-                .generateHOTPCodeString(algorithm: algorithm.value, widget.item.key!, used.value, isGoogle: true)
+                .generateHOTPCodeString(algorithm: algorithm.value, widget.item.key!, counter.value, isGoogle: true)
                 .split("")
               ..insert(3, " "))
             .join("");
@@ -91,19 +92,23 @@ class ListItemViewState extends ConsumerState<ListItemView> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.item.name!,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  token.value,
-                  style: TextStyle(
-                      fontSize: 24, color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w500),
-                )
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.item.name! + extraStr,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    token.value,
+                    style: TextStyle(
+                        fontSize: 24, color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w500),
+                  )
+                ],
+              ),
             ),
             widget.item.type == "TOTP"
                 ? Container(
@@ -127,9 +132,9 @@ class ListItemViewState extends ConsumerState<ListItemView> {
                           child: const Icon(Icons.refresh)),
                     ),
                     onTap: () {
-                      used.value++;
+                      counter.value++;
                       getHotp();
-                      ref.read(verificationItemsProvider.notifier).updateHotp(widget.item.id, used.value);
+                      ref.read(verificationItemsProvider.notifier).updateHotp(widget.item.id, counter.value);
                     },
                   ),
           ],
@@ -166,7 +171,7 @@ class ListItemViewState extends ConsumerState<ListItemView> {
                   ),
                   onTap: () async {
                     GoRouter.of(context).pop();
-                    GoRouter.of(context).push("/code", extra: widget.item);
+                    GoRouter.of(context).push("/code", extra: widget.item.copyWith(counter: counter.value));
                   },
                 ),
                 ListTile(

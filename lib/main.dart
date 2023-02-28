@@ -46,8 +46,6 @@ class MyApp extends HookConsumerWidget {
         } else {
           supportMonet = true;
         }
-
-        Log.e(ref.read(monetEnableProvider.notifier).state, "ltc");
         return MaterialApp.router(
           theme: ThemeData(colorScheme: (monetEnabled ? lightDynamic : null) ?? defaultLightColor, useMaterial3: true),
           darkTheme:

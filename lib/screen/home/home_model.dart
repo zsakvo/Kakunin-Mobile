@@ -53,10 +53,10 @@ class VerificationItemsNotifier extends StateNotifier<List<ListItemView>> {
     });
   }
 
-  updateHotp(int id, int used) {
+  updateHotp(int id, int counter) {
     _isar.writeTxnSync(() {
       final item = _isar.verificationItems.getSync(id);
-      item!.used = used;
+      item!.counter = counter;
       _isar.verificationItems.putSync(item);
     });
   }

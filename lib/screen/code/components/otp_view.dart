@@ -29,7 +29,7 @@ class OtpViewState extends ConsumerState<OtpView> {
   final shaController = TextEditingController();
   String? nameErrorText;
   String? keyErrorText;
-  late final int? id;
+  int? id;
   // String? nameErrorText;
   // String? nameErrorText;
   bool valid = true;
@@ -177,6 +177,7 @@ class OtpViewState extends ConsumerState<OtpView> {
     if (id != null) {
       item.id = id!;
     }
+    verify();
     if (valid) widget.onSubmit(item);
   }
 
