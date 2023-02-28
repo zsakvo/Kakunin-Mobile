@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cc.zsakvo.otp">
    <application
-        android:label="kakunin"
+        android:label="踟蹰"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
