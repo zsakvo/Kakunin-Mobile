@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart' hide DropdownMenu, DropdownMenuEntry;
 import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/components/dropdown_menu.dart';
 import 'package:kakunin/data/models/verification_item.dart';
-import 'package:kakunin/utils/log.dart';
 import 'package:base32/base32.dart';
 
 enum VerifyType { totp, hotp }
@@ -165,6 +163,7 @@ class OtpViewState extends ConsumerState<OtpView> {
 
   submit() {
     final VerificationItem item = VerificationItem(
+        id: id,
         type: widget.verifyType == VerifyType.totp ? "TOTP" : "HOTP",
         name: nameController.text,
         vendor: vendorController.text,

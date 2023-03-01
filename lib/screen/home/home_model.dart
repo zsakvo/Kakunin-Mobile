@@ -1,7 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:kakunin/data/models/verification_item.dart';
-import 'package:kakunin/utils/log.dart';
 
 import 'package:timezone/timezone.dart' as timezone;
 
@@ -43,8 +42,7 @@ class VerificationItemsNotifier extends StateNotifier<List<ListItemView>> {
     });
   }
 
-  updateItem(VerificationItem item, {int? id}) {
-    Log.d(item, id.toString());
+  updateItem(VerificationItem item) {
     int index = state.indexWhere((element) => element.item.id == item.id);
     var arr = [...state];
     arr[index] = ListItemView(item: item);

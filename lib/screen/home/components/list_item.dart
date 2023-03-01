@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/data/models/verification_item.dart';
 import 'package:kakunin/screen/home/home_model.dart';
-import 'package:kakunin/utils/log.dart';
 import 'package:otp/otp.dart';
 import 'package:timezone/timezone.dart' as timezone;
 
@@ -135,7 +134,7 @@ class ListItemViewState extends ConsumerState<ListItemView> {
                     onTap: () {
                       counter.value++;
                       getHotp();
-                      ref.read(verificationItemsProvider.notifier).updateHotp(widget.item.id, counter.value);
+                      ref.read(verificationItemsProvider.notifier).updateHotp(widget.item.id!, counter.value);
                     },
                   ),
           ],

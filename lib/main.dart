@@ -8,7 +8,6 @@ import 'package:isar/isar.dart';
 import 'package:kakunin/data/models/verification_item.dart';
 import 'package:kakunin/router.dart';
 import 'package:kakunin/utils/color.dart';
-import 'package:kakunin/utils/log.dart';
 import 'package:kakunin/utils/scroll.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

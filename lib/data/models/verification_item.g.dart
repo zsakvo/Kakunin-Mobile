@@ -141,6 +141,7 @@ VerificationItem _verificationItemDeserialize(
 ) {
   final object = VerificationItem(
     counter: reader.readLongOrNull(offsets[0]),
+    id: id,
     key: reader.readStringOrNull(offsets[1]),
     length: reader.readLongOrNull(offsets[2]),
     name: reader.readStringOrNull(offsets[3]),
@@ -150,7 +151,6 @@ VerificationItem _verificationItemDeserialize(
     used: reader.readLongOrNull(offsets[7]),
     vendor: reader.readStringOrNull(offsets[8]),
   );
-  object.id = id;
   return object;
 }
 
@@ -185,7 +185,7 @@ P _verificationItemDeserializeProp<P>(
 }
 
 Id _verificationItemGetId(VerificationItem object) {
-  return object.id;
+  return object.id ?? Isar.autoIncrement;
 }
 
 List<IsarLinkBase<dynamic>> _verificationItemGetLinks(VerificationItem object) {
@@ -353,7 +353,25 @@ extension VerificationItemQueryFilter
   }
 
   QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
-      idEqualTo(Id value) {
+      idIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      idIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      idEqualTo(Id? value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -364,7 +382,7 @@ extension VerificationItemQueryFilter
 
   QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
       idGreaterThan(
-    Id value, {
+    Id? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -378,7 +396,7 @@ extension VerificationItemQueryFilter
 
   QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
       idLessThan(
-    Id value, {
+    Id? value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -392,8 +410,8 @@ extension VerificationItemQueryFilter
 
   QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
       idBetween(
-    Id lower,
-    Id upper, {
+    Id? lower,
+    Id? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
