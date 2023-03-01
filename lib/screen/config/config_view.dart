@@ -102,7 +102,10 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                 ),
                 onTap: () async {
                   try {
-                    await launchUrl(Uri.parse("https://github.com/zsakvo/Kakunin-Mobile"));
+                    await launchUrl(
+                      Uri.parse("https://github.com/zsakvo/Kakunin-Mobile"),
+                      mode: LaunchMode.externalApplication,
+                    );
                   } catch (err) {
                     Log.e(err);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
