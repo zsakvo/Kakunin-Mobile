@@ -43,7 +43,8 @@ class VerificationItemsNotifier extends StateNotifier<List<ListItemView>> {
     });
   }
 
-  updateItem(VerificationItem item) {
+  updateItem(VerificationItem item, {int? id}) {
+    Log.d(item, id.toString());
     int index = state.indexWhere((element) => element.item.id == item.id);
     var arr = [...state];
     arr[index] = ListItemView(item: item);

@@ -174,9 +174,6 @@ class OtpViewState extends ConsumerState<OtpView> {
         counter: int.tryParse(counterController.text),
         used: 0,
         sha: shaController.text);
-    if (id != null) {
-      item.id = id!;
-    }
     verify();
     if (valid) widget.onSubmit(item);
   }

@@ -61,7 +61,7 @@ class MyApp extends HookConsumerWidget {
 }
 
 final colorThemeProvider =
-    StateProvider((ref) => getMaterialColor(Color(spInstance.getInt("colorSeed") ?? 0xff2196f3)));
+    StateProvider((ref) => getMaterialColor(Color(spInstance.getInt("colorSeed") ?? 4294198070)));
 
 final monetEnableProvider = StateProvider((ref) => spInstance.getBool("dynamicColor") ?? false);
 
