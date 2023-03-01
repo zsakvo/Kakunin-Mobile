@@ -135,7 +135,7 @@ class _CodeViewState extends ConsumerState<CodeView> {
                     //   _isar.verificationItems.putSync(item);
                     // });
                     if (widget.item == null) {
-                      ref.read(verificationItemsProvider.notifier).insertItem(item);
+                      ref.read(verificationItemsProvider.notifier).insertItem([item]);
                     } else {
                       ref.read(verificationItemsProvider.notifier).updateItem(item);
                     }

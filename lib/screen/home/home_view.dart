@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 // import 'package:go_router_flow/go_router_flow.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/screen/home/home_model.dart';
+import 'package:kakunin/utils/decode.dart';
 import 'package:kakunin/utils/parse.dart';
 
 class HomeView extends StatefulHookConsumerWidget {
@@ -44,10 +45,13 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
     //   };
     // }, []);
 
-    // useEffect(() {
-    //   ref.read(verificationItemsProvider.notifier).chronometer();
-    //   return () {};
-    // }, []);
+    useEffect(() {
+      var auth = GoogleAuth(
+          originStr:
+              "otpauth-migration://offline?data=CisKFNwFRXuZwIxcOvmrBSc7%2F8jtyYEHEgtob3RwLXNoYTUxMiABKAEwATgBEAEYASAAKKisir8G");
+      auth.decode();
+      return () {};
+    }, []);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -163,13 +167,13 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
             onPressed: () {
               Navigator.of(context).pop();
               var res = Parse.uri(uriController.text);
-              if (res != null) {
+              if (res.isNotEmpty) {
                 ref.read(verificationItemsProvider.notifier).insertItem(res);
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   behavior: SnackBarBehavior.floating,
                   content: Text(
-                    "您导入的 Uri 链接无效",
+                    "您导入的 Uri 链接不包含有效数据",
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                   backgroundColor: Theme.of(context).colorScheme.errorContainer,

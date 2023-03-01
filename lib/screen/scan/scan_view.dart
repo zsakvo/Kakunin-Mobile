@@ -37,7 +37,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
                 scanned = true;
                 final rawString = barcodes.barcodes.first.rawValue;
                 var res = Parse.uri(rawString ?? "");
-                if (res == null) {
+                if (res.isEmpty) {
                   openWarnDialog(context);
                 } else {
                   ref.read(verificationItemsProvider.notifier).insertItem(res);

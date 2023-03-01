@@ -30,15 +30,17 @@ class VerificationItemsNotifier extends StateNotifier<List<ListItemView>> {
         .toList();
   }
 
-  insertItem(VerificationItem item) {
+  insertItem(List<VerificationItem> items) {
     state = [
-      ListItemView(
-        item: item,
-      ),
+      ...items.map((item) => ListItemView(
+            item: item,
+          )),
       ...state
     ];
     _isar.writeTxnSync(() {
-      _isar.verificationItems.putSync(item);
+      for (var item in items) {
+        _isar.verificationItems.putSync(item);
+      }
     });
   }
 

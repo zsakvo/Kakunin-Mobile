@@ -35,7 +35,7 @@ class ListItemViewState extends ConsumerState<ListItemView> {
       lowerBound: 0,
       upperBound: 1,
       vsync: vsync,
-      duration: Duration(seconds: widget.item.time!),
+      duration: Duration(seconds: widget.item.time ?? 30),
     );
 
     useEffect(() {
