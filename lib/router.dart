@@ -5,6 +5,8 @@ import 'package:kakunin/data/models/verification_item.dart';
 import 'package:kakunin/screen/code/code_view.dart';
 import 'package:kakunin/screen/config/config_view.dart';
 import 'package:kakunin/screen/home/home_view.dart';
+import 'package:kakunin/screen/libs/lib_detail_screen.dart';
+import 'package:kakunin/screen/libs/libs_screen.dart';
 import 'package:kakunin/screen/scan/scan_view.dart';
 
 class AppPages {
@@ -27,6 +29,17 @@ class AppPages {
     GoRoute(
       path: '/config',
       builder: (context, state) => const ConfigView(),
+    ),
+    GoRoute(
+      path: '/libs',
+      builder: (context, state) => const LibsView(),
+    ),
+    GoRoute(
+      path: '/lib_detail',
+      builder: (context, state) {
+        String lib = state.extra as String;
+        return LibDetailView(lib: lib);
+      },
     ),
   ]);
 }

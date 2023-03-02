@@ -95,6 +95,17 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
               ),
               ListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                title: Text("开源许可", style: titleStyle),
+                subtitle: Text(
+                  "没有他们就没有我 :)",
+                  style: subTitleStyle,
+                ),
+                onTap: () {
+                  GoRouter.of(context).push("/libs");
+                },
+              ),
+              ListTile(
+                contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                 title: Text("项目主页", style: titleStyle),
                 subtitle: Text(
                   "来看看不知所云的源代码，或者请我喝咖啡？",
