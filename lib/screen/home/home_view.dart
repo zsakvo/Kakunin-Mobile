@@ -1,12 +1,16 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 // import 'package:go_router_flow/go_router_flow.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kakunin/main.dart';
 import 'package:kakunin/screen/home/home_model.dart';
 import 'package:kakunin/utils/decode.dart';
+import 'package:kakunin/utils/log.dart';
 import 'package:kakunin/utils/parse.dart';
+import 'package:local_auth/local_auth.dart';
 
 class HomeView extends StatefulHookConsumerWidget {
   const HomeView({super.key});
@@ -18,6 +22,8 @@ class HomeView extends StatefulHookConsumerWidget {
 class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+  final needAuth = spInstance.getBool("auth") ?? false;
+  final LocalAuthentication auth = LocalAuthentication();
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -26,7 +32,18 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
     // final tokenItems = ref.watch(tokenValueProvider);
     // final timeItems = ref.watch(timeLeftProvider);
     // final timeMaps = ref.watch(timeValueProvider);
+    Future<bool> authHandler() async {
+      Log.e(needAuth, 'needAuth');
+      if (!needAuth) {
+        return true;
+      } else {
+        final bool didAuthenticate = await auth.authenticate(localizedReason: '请验证您的身份信息');
+        return (didAuthenticate);
+      }
+    }
+
     final scrollController = useScrollController(keepScrollOffset: true);
+    final authFuture = useFuture(useMemoized(() => authHandler()), initialData: null);
     // final dy = useState(0.0);
     // scrollListener() {
     //   dy.value = scrollController.position.pixels;
@@ -46,12 +63,17 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
     // }, []);
 
     useEffect(() {
-      var auth = GoogleAuth(
-          originStr:
-              "otpauth-migration://offline?data=CisKFNwFRXuZwIxcOvmrBSc7%2F8jtyYEHEgtob3RwLXNoYTUxMiABKAEwATgBEAEYASAAKKisir8G");
-      auth.decode();
+      if (authFuture.data != null) {
+        if (authFuture.data!) {
+          Future(() {
+            ref.read(verificationItemsProvider.notifier).refresh();
+          });
+        } else {
+          SystemNavigator.pop();
+        }
+      }
       return () {};
-    }, []);
+    }, [authFuture.data]);
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(

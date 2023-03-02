@@ -17,9 +17,7 @@ class VerificationItemsNotifier extends StateNotifier<List<ListItemView>> {
   final Ref ref;
   VerificationItemsNotifier(
     this.ref,
-  ) : super([]) {
-    refresh();
-  }
+  ) : super([]);
   refresh() {
     state = _isar.verificationItems
         .where()

@@ -1,8 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/main.dart';
 import 'package:kakunin/utils/log.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'components/color.dart';
@@ -15,13 +20,24 @@ class ConfigView extends StatefulHookConsumerWidget {
 }
 
 class _ConfigViewState extends ConsumerState<ConfigView> {
+  final LocalAuthentication auth = LocalAuthentication();
   final titleStyle = const TextStyle(
     fontSize: 20,
   );
   final subTitleStyle = const TextStyle(fontSize: 14);
+  checkAuth() async {
+    final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
+    return canAuthenticateWithBiometrics || await auth.isDeviceSupported();
+  }
+
   @override
   Widget build(BuildContext context) {
     final monetEnabled = ref.watch(monetEnableProvider);
+    final needAuth = useState(spInstance.getBool("auth") ?? false);
+    useEffect(() {
+      spInstance.setBool("auth", needAuth.value);
+      return null;
+    }, [needAuth.value]);
     // final monetSupport = ref.watch(monetEnableProvider);
     return Scaffold(
         appBar: AppBar(
@@ -85,6 +101,46 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                         style: subTitleStyle,
                       ),
                     ),
+              Container(
+                margin: const EdgeInsets.only(top: 16),
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                child: Text(
+                  "数据",
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                ),
+              ),
+              ListTile(
+                contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                title: Text("安全认证", style: titleStyle),
+                subtitle: Text(
+                  "启动时进行安全验证",
+                  style: subTitleStyle,
+                ),
+                trailing: Switch(
+                  value: needAuth.value,
+                  onChanged: (value) {
+                    needAuth.value = value;
+                  },
+                  // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
+                ),
+                onTap: () async {
+                  try {
+                    final bool didAuthenticate = await auth.authenticate(localizedReason: '请验证您的身份信息');
+                    if (didAuthenticate) {
+                      needAuth.value = !needAuth.value;
+                    }
+                  } on PlatformException {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        "您的系统没有注册任何认证方式",
+                        style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
+                      ),
+                      backgroundColor: Theme.of(context).colorScheme.errorContainer,
+                      behavior: SnackBarBehavior.floating,
+                    ));
+                  }
+                },
+              ),
               Container(
                 margin: const EdgeInsets.only(top: 16),
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
