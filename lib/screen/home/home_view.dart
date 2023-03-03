@@ -1,8 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -10,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/main.dart';
 import 'package:kakunin/screen/home/home_model.dart';
-import 'package:kakunin/utils/decode.dart';
 import 'package:kakunin/utils/log.dart';
 import 'package:kakunin/utils/parse.dart';
 import 'package:local_auth/local_auth.dart';

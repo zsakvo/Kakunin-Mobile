@@ -28,7 +28,7 @@ class LibDetailView extends HookConsumerWidget {
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
           child: Text(
             licenseString.data!,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
       )),
