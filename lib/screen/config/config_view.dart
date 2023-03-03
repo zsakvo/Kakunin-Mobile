@@ -141,6 +141,17 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                   }
                 },
               ),
+              ListTile(
+                contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                title: Text("备份和恢复", style: titleStyle),
+                subtitle: Text(
+                  "数据上云，减少意外丢失风险",
+                  style: subTitleStyle,
+                ),
+                onTap: () {
+                  GoRouter.of(context).push("/backup");
+                },
+              ),
               Container(
                 margin: const EdgeInsets.only(top: 16),
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),

@@ -57,6 +57,10 @@ dependencies:
   protobuf: ^2.1.0
   local_auth: ^2.1.5
   flutter_exit_app: ^1.1.2
+  googleapis: ^10.1.0
+  google_sign_in: ^6.0.2
+  firebase_core: ^2.7.0
+  extension_google_sign_in_as_googleapis_auth: ^2.0.9
 
 dev_dependencies:
   flutter_test:

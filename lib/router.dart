@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kakunin/data/models/verification_item.dart';
+import 'package:kakunin/screen/backup/backup_view.dart';
 // import 'package:go_router_flow/go_router_flow.dart';
 import 'package:kakunin/screen/code/code_view.dart';
 import 'package:kakunin/screen/config/config_view.dart';
@@ -41,6 +42,10 @@ class AppPages {
         return LibDetailView(lib: lib);
       },
     ),
+    GoRoute(
+      path: '/backup',
+      builder: (context, state) => const BackupView(),
+    )
   ]);
 }
 

@@ -11,12 +11,18 @@ import 'package:kakunin/utils/color.dart';
 import 'package:kakunin/utils/scroll.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 import 'package:timezone/data/latest.dart' as timezone;
 
 late final SharedPreferences spInstance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   timezone.initializeTimeZones();
   spInstance = await SharedPreferences.getInstance();
   Isar.openSync([VerificationItemSchema]);
