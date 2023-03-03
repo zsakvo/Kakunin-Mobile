@@ -1,4 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -27,6 +29,8 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    // final appLifecycleState = useAppLifecycleState();
+
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     final verificationItems = ref.watch(verificationItemsProvider);
     // final tokenItems = ref.watch(tokenValueProvider);
@@ -70,6 +74,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
           });
         } else {
           SystemNavigator.pop();
+          exit(0);
         }
       }
       return () {};
