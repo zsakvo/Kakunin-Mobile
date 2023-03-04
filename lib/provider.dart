@@ -1,5 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'dart:io' as io;
@@ -186,7 +187,7 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
     final File? gFile = state.gFile;
     if (gFile != null) {
       final file = await state.gDriveApi!.files.get(gFile.id!, downloadOptions: DownloadOptions.fullMedia) as Media;
-      final bytes = await file.stream.first;
+      final bytes = await streamToList(file.stream);
       String str = utf8.decode(bytes);
       String clearStr = await Encode.decode(str);
       restoreClearString(clearStr);
@@ -225,3 +226,13 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
 final cloudAccountProvider = StateNotifierProvider<CloudAccountNotifier, CloudAccount>((ref) {
   return CloudAccountNotifier(ref: ref);
 });
+
+Future<List<int>> streamToList(Stream<List<int>> stream) async {
+  final completer = Completer<List<int>>();
+  final sink = ByteConversionSink.withCallback((bytes) => completer.complete(bytes));
+
+  await stream.listen(sink.add).asFuture();
+  sink.close();
+
+  return completer.future;
+}
