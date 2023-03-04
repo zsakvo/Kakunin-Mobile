@@ -11,6 +11,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/hooks/use_memorized_future.dart';
 import 'package:kakunin/main.dart';
 import 'package:kakunin/provider.dart';
+import 'package:kakunin/utils/cloud.dart';
 import 'package:kakunin/utils/encode.dart';
 import 'package:kakunin/utils/log.dart';
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
@@ -69,23 +70,28 @@ class _BackupViewState extends ConsumerState<BackupView> {
               children: [
                 Container(
                   margin: const EdgeInsets.only(top: 16),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                    title: Text(
-                      "云连接类型",
-                      style: titleStyle,
-                    ),
-                    subtitle: Text(
-                      "当前仅支持 Google Drive",
-                      style: subTitleStyle,
-                    ),
-                    onTap: () async {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("说了只支持Google Drive"),
-                        behavior: SnackBarBehavior.floating,
-                      ));
-                    },
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  child: Text(
+                    "帐户",
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
+                ),
+                ListTile(
+                  contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                  title: Text(
+                    "云连接类型",
+                    style: titleStyle,
+                  ),
+                  subtitle: Text(
+                    "当前仅支持 Google Drive",
+                    style: subTitleStyle,
+                  ),
+                  onTap: () async {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text("说了只支持Google Drive"),
+                      behavior: SnackBarBehavior.floating,
+                    ));
+                  },
                 ),
                 cloudAccount.isLogin
                     ? ListTile(
@@ -115,6 +121,14 @@ class _BackupViewState extends ConsumerState<BackupView> {
                           ref.read(cloudAccountProvider.notifier).login(CloudAccountType.Google, handle: true);
                         },
                       ),
+                Container(
+                  margin: const EdgeInsets.only(top: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  child: Text(
+                    "云端",
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  ),
+                ),
                 ListTile(
                   contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                   title: Text(
@@ -136,7 +150,9 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     style: titleStyle,
                   ),
                   subtitle: Text(
-                    "期待，并满怀希望吧",
+                    cloudAccount.gFile == null
+                        ? "暂未找到备份文件"
+                        : "文件大小：${Parse.formatFileSize(cloudAccount.gFile!.size)}\n修改时间：${cloudAccount.gFile!.modifiedTime!.toLocal()}",
                     style: subTitleStyle,
                   ),
                   onTap: () async {
@@ -152,14 +168,67 @@ class _BackupViewState extends ConsumerState<BackupView> {
                   horizontalTitleGap: 0,
                   contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   subtitle: Text(
-                    "如果你登陆了云端帐号，那么备份时会同时备份到双端，恢复时优先从云端读取，长按可以从本地恢复。如果你没有登录云端帐号，则只有对应的本地逻辑。值得注意的是，备份时是直接覆盖备份，恢复时则是会和当前本地记录合并。",
+                    CloudUtil.getHint(CloudAccountType.Google),
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
                       fontSize: 13,
                     ),
                   ),
-                )
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  child: Text(
+                    "本地",
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  ),
+                ),
+                ListTile(
+                  contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                  title: Text(
+                    "导出备份",
+                    style: titleStyle,
+                  ),
+                  subtitle: Text(
+                    "导出明文数据到 /sdcard/Download/kakunin.otp",
+                    style: subTitleStyle,
+                  ),
+                  onTap: () async {
+                    ref.read(cloudAccountProvider.notifier).backUp();
+                  },
+                ),
+                ListTile(
+                  contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                  title: Text(
+                    "导入备份文件",
+                    style: titleStyle,
+                  ),
+                  subtitle: Text(
+                    "暂时只支持应用本身的导出数据",
+                    style: subTitleStyle,
+                  ),
+                  onTap: () async {
+                    ref.read(cloudAccountProvider.notifier).restoreGoogle();
+                  },
+                ),
+                const Divider(
+                  indent: 16,
+                  endIndent: 16,
+                ),
+                ListTile(
+                  leading: const Icon(Icons.help_outline_outlined),
+                  horizontalTitleGap: 0,
+                  contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  subtitle: Text(
+                    "本地导出的数据是明文的，所以请您自行保管好备份文件，以免引起不必要的风险和损失",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
               ],
             ),
           )

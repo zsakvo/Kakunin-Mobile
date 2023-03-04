@@ -9,6 +9,7 @@ import 'package:googleapis/drive/v3.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:kakunin/router.dart';
+import 'package:kakunin/screen/home/home_model.dart';
 import 'package:kakunin/utils/encode.dart';
 import 'package:kakunin/utils/log.dart';
 import 'package:kakunin/utils/parse.dart';
@@ -22,23 +23,19 @@ class CloudAccount {
   final String? total;
   final bool isLogin;
   final DriveApi? gDriveApi;
+  final File? gFile;
 
-  CloudAccount({this.isLogin = false, this.user, this.usage, this.total, this.gDriveApi});
+  CloudAccount({this.isLogin = false, this.user, this.usage, this.total, this.gDriveApi, this.gFile});
 
-  CloudAccount copyWith({
-    String? user,
-    String? usage,
-    String? total,
-    bool? isLogin,
-    DriveApi? gDriveApi,
-  }) {
+  CloudAccount copyWith(
+      {String? user, String? usage, String? total, bool? isLogin, DriveApi? gDriveApi, final File? gFile}) {
     return CloudAccount(
-      user: user ?? this.user,
-      usage: usage ?? this.usage,
-      total: total ?? this.total,
-      isLogin: isLogin ?? this.isLogin,
-      gDriveApi: gDriveApi ?? this.gDriveApi,
-    );
+        user: user ?? this.user,
+        usage: usage ?? this.usage,
+        total: total ?? this.total,
+        isLogin: isLogin ?? this.isLogin,
+        gDriveApi: gDriveApi ?? this.gDriveApi,
+        gFile: gFile ?? this.gFile);
   }
 }
 
@@ -71,6 +68,7 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
               final driveApi = DriveApi(client!);
               state = CloudAccount(isLogin: true, user: googleAccount.email, gDriveApi: driveApi);
               getQuota();
+              searchBackUpFile();
             }
           } else {
             state = CloudAccount(isLogin: false);
@@ -97,8 +95,25 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
   }
 
   searchGoogleBakFile() async {
-    var res = await state.gDriveApi!.files.list(q: "name='kakunin.otp'");
-    return res.files!.isEmpty ? null : res.files!.first;
+    var res = await state.gDriveApi!.files
+        .list(q: "name='kakunin.otp'", $fields: "files(modifiedTime,id,name,createdTime,version,size,md5Checksum)");
+    if (res.files!.isEmpty) {
+      return null;
+    } else {
+      var file = res.files!.first;
+      Log.e(file.toJson(), "fff");
+      state = state.copyWith(gFile: file);
+      return file;
+    }
+  }
+
+  searchBackUpFile() {
+    switch (accountType) {
+      case CloudAccountType.Google:
+        searchGoogleBakFile();
+        break;
+      default:
+    }
   }
 
   logout() {
@@ -131,7 +146,7 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
 
   backUpGoogle() async {
     if (state.isLogin) {
-      final File? gFile = await searchGoogleBakFile();
+      final File? gFile = state.gFile;
       final String text = await Encode.rsa(ref);
       final ints = text.codeUnits;
       File tmpFile = File(
@@ -154,13 +169,22 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
   }
 
   restoreGoogle() async {
-    final File? gFile = await searchGoogleBakFile();
+    final File? gFile = state.gFile;
     if (gFile != null) {
       final file = await state.gDriveApi!.files.get(gFile.id!, downloadOptions: DownloadOptions.fullMedia) as Media;
       final bytes = await file.stream.first;
       String str = utf8.decode(bytes);
       String clearStr = await Encode.decode(str);
-      Log.e(clearStr);
+      var items = json.decode(clearStr) as List;
+      var localItems = ref.read(verificationItemsProvider.notifier).state.map((e) => e.item.uriString).toList() as List;
+      int i = 0;
+      for (var item in items) {
+        if (!localItems.contains(item)) {
+          ref.read(verificationItemsProvider.notifier).insertItem(Parse.uri(item));
+          i++;
+        }
+      }
+      showSnackBar("完成，共恢复了$i条数据");
     } else {
       showErrorSnackBar("没有找到备份文件");
     }
