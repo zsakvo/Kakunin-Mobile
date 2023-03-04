@@ -62,6 +62,8 @@ dependencies:
   firebase_core: ^2.7.0
   extension_google_sign_in_as_googleapis_auth: ^2.0.9
   fast_rsa: ^3.5.6
+  path_provider: ^2.0.13
+  file_picker: ^5.2.5
 
 dev_dependencies:
   flutter_test:

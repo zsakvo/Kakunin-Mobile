@@ -195,7 +195,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     style: subTitleStyle,
                   ),
                   onTap: () async {
-                    ref.read(cloudAccountProvider.notifier).backUp();
+                    ref.read(cloudAccountProvider.notifier).backUpLocal();
                   },
                 ),
                 ListTile(
@@ -209,7 +209,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     style: subTitleStyle,
                   ),
                   onTap: () async {
-                    ref.read(cloudAccountProvider.notifier).restoreGoogle();
+                    ref.read(cloudAccountProvider.notifier).restoreLocal();
                   },
                 ),
                 const Divider(

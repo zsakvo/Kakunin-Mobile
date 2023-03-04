@@ -2,7 +2,10 @@
 
 import 'dart:convert';
 
+import 'dart:io' as io;
+
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
@@ -14,6 +17,7 @@ import 'package:kakunin/utils/encode.dart';
 import 'package:kakunin/utils/log.dart';
 import 'package:kakunin/utils/parse.dart';
 import 'package:kakunin/utils/snackbar.dart';
+import 'package:path_provider/path_provider.dart';
 
 enum CloudAccountType { Google, WebDav, DropBox, AliYun }
 
@@ -145,27 +149,37 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
   }
 
   backUpGoogle() async {
-    if (state.isLogin) {
-      final File? gFile = state.gFile;
-      final String text = await Encode.rsa(ref);
-      final ints = text.codeUnits;
-      File tmpFile = File(
-        name: "kakunin.otp",
-        description: "Kakunin 应用备份",
-      );
-      Media uploadMedia = Media(Stream.value(ints), ints.length);
-      if (gFile == null) {
-        await state.gDriveApi!.files.create(tmpFile, uploadMedia: uploadMedia);
-      } else {
-        Log.e(gFile.toJson());
-        final id = gFile.id;
-        state.gDriveApi!.files.update(tmpFile, id!, uploadMedia: uploadMedia);
-      }
-      getQuota();
-      showSnackBar("备份成功");
+    final File? gFile = state.gFile;
+    final String text = await Encode.rsa(ref);
+    final ints = text.codeUnits;
+    File tmpFile = File(
+      name: "kakunin.otp",
+      description: "Kakunin 应用备份",
+    );
+    Media uploadMedia = Media(Stream.value(ints), ints.length);
+    if (gFile == null) {
+      await state.gDriveApi!.files.create(tmpFile, uploadMedia: uploadMedia);
     } else {
-      final text = Encode.clear(ref);
+      Log.e(gFile.toJson());
+      final id = gFile.id;
+      state.gDriveApi!.files.update(tmpFile, id!, uploadMedia: uploadMedia);
     }
+    getQuota();
+    showSnackBar("备份成功");
+  }
+
+  backUpLocal() async {
+    final text = Encode.clear(ref);
+    late final io.File file;
+    if (io.Platform.isAndroid) {
+      file = io.File("/sdcard/Download/kakunin.otp");
+    } else {
+      final downloadsDir = await getDownloadsDirectory();
+      file = io.File("${downloadsDir!.path}/../kakunin.otp");
+    }
+    file.createSync();
+    file.writeAsStringSync(text);
+    showSnackBar("备份成功");
   }
 
   restoreGoogle() async {
@@ -175,19 +189,36 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
       final bytes = await file.stream.first;
       String str = utf8.decode(bytes);
       String clearStr = await Encode.decode(str);
-      var items = json.decode(clearStr) as List;
-      var localItems = ref.read(verificationItemsProvider.notifier).state.map((e) => e.item.uriString).toList() as List;
-      int i = 0;
-      for (var item in items) {
-        if (!localItems.contains(item)) {
-          ref.read(verificationItemsProvider.notifier).insertItem(Parse.uri(item));
-          i++;
-        }
-      }
-      showSnackBar("完成，共恢复了$i条数据");
+      restoreClearString(clearStr);
     } else {
       showErrorSnackBar("没有找到备份文件");
     }
+  }
+
+  restoreLocal() async {
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(dialogTitle: "选择您的备份文件", type: FileType.custom, allowedExtensions: ["otp"]);
+    if (result != null) {
+      io.File file = io.File(result.files.single.path!);
+      String clearStr = file.readAsStringSync();
+      restoreClearString(clearStr);
+    } else {
+      // User canceled the picker
+      showErrorSnackBar("未选择任何文件");
+    }
+  }
+
+  restoreClearString(String clearStr) {
+    var items = json.decode(clearStr) as List;
+    var localItems = ref.read(verificationItemsProvider.notifier).state.map((e) => e.item.uriString).toList() as List;
+    int i = 0;
+    for (var item in items) {
+      if (!localItems.contains(item)) {
+        ref.read(verificationItemsProvider.notifier).insertItem(Parse.uri(item));
+        i++;
+      }
+    }
+    showSnackBar("完成，共恢复了$i条数据");
   }
 }
 
