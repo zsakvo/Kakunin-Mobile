@@ -6,6 +6,7 @@ import FlutterMacOS
 import Foundation
 
 import dynamic_color
+import fast_rsa
 import firebase_core
 import isar_flutter_libs
 import mobile_scanner
@@ -14,6 +15,7 @@ import url_launcher_macos
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   DynamicColorPlugin.register(with: registry.registrar(forPlugin: "DynamicColorPlugin"))
+  FastRsaPlugin.register(with: registry.registrar(forPlugin: "FastRsaPlugin"))
   FLTFirebaseCorePlugin.register(with: registry.registrar(forPlugin: "FLTFirebaseCorePlugin"))
   IsarFlutterLibsPlugin.register(with: registry.registrar(forPlugin: "IsarFlutterLibsPlugin"))
   MobileScannerPlugin.register(with: registry.registrar(forPlugin: "MobileScannerPlugin"))

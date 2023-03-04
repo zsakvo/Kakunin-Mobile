@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   dynamic_color
+  fast_rsa
   isar_flutter_libs
   local_auth_windows
   url_launcher_windows

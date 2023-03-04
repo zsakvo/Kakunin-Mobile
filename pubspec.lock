@@ -249,6 +249,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.1"
+  fast_rsa:
+    dependency: "direct main"
+    description:
+      name: fast_rsa
+      sha256: "04e712f781e772fd5eff35aa19465ce2577f30203ca9adb9e37d4dd32929ed8f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.6"
   ffi:
     dependency: transitive
     description:
@@ -297,6 +305,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  flat_buffers:
+    dependency: transitive
+    description:
+      name: flat_buffers
+      sha256: "23e2ced0d8e8ecdffbd9f267f49a668c74438393b9acaeac1c724123e3764263"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.5"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -596,10 +612,10 @@ packages:
     dependency: "direct main"
     description:
       name: local_auth
-      sha256: "1625a217c599db02044df992509eb52584cfdaa8219958d516b74f644ef2c626"
+      sha256: "0cf238be2bfa51a6c9e7e9cfc11c05ea39f2a3a4d3e5bb255d0ebc917da24401"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.5"
+    version: "2.1.6"
   local_auth_android:
     dependency: transitive
     description:
@@ -612,10 +628,10 @@ packages:
     dependency: transitive
     description:
       name: local_auth_ios
-      sha256: "14e7822264fbb6842240e09ff32a60e2ca2b1c3207de8adf2f56c149cccd49fd"
+      sha256: b4b7a02eec2bd8ffea78026658264e7a720c841cca7732dfa27e36af2f727dd8
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.13"
+    version: "1.1.0"
   local_auth_platform_interface:
     dependency: transitive
     description:

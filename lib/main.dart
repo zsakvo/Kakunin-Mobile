@@ -3,11 +3,16 @@ import 'dart:io';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:googleapis/drive/v3.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:kakunin/data/models/verification_item.dart';
+import 'package:kakunin/provider.dart';
 import 'package:kakunin/router.dart';
 import 'package:kakunin/utils/color.dart';
+
 import 'package:kakunin/utils/scroll.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +22,14 @@ import 'firebase_options.dart';
 import 'package:timezone/data/latest.dart' as timezone;
 
 late final SharedPreferences spInstance;
+
+final GoogleSignIn googleSignIn = GoogleSignIn(
+  scopes: ['email', DriveApi.driveFileScope],
+);
+
+// late final GoogleSignInAccount? googleAccount;
+
+// late final DriveApi? driveApi;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +56,11 @@ class MyApp extends HookConsumerWidget {
     final monetEnabled = ref.watch(monetEnableProvider);
     final defaultLightColor = ColorScheme.fromSeed(seedColor: colorSeed, brightness: Brightness.light);
     final defaultDarkColor = ColorScheme.fromSeed(seedColor: colorSeed, brightness: Brightness.dark);
+    useEffect(() {
+      // initGoogleAccount(context);
+      ref.read(cloudAccountProvider.notifier).login(CloudAccountType.Google);
+      return null;
+    }, []);
     return DynamicColorBuilder(
       builder: (lightDynamic, darkDynamic) {
         if (lightDynamic == null || darkDynamic == null) {
@@ -70,3 +88,21 @@ final colorThemeProvider =
 final monetEnableProvider = StateProvider((ref) => spInstance.getBool("dynamicColor") ?? false);
 
 bool supportMonet = false;
+
+// initGoogleAccount(context) async {
+//   bool isSignedIn = await googleSignIn.isSignedIn();
+//   Log.e(isSignedIn, 'isSignedIn');
+//   if (isSignedIn) {
+//     googleAccount = await googleSignIn.signInSilently();
+//     driveApi = DriveApi((await googleSignIn.authenticatedClient())!);
+//   } else {
+//     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+//       content: Text(
+//         "Google 账户登录失败，请检查您的网络连接并重新登录",
+//         style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
+//       ),
+//       backgroundColor: Theme.of(context).colorScheme.errorContainer,
+//       behavior: SnackBarBehavior.floating,
+//     ));
+//   }
+// }

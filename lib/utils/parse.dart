@@ -27,4 +27,20 @@ class Parse {
   static timeValue(time, allTime) {
     return (time / allTime) * 1.00;
   }
+
+  static String formatFileSize(dynamic bytes) {
+    bytes = int.parse(bytes);
+    if (bytes < 1024) {
+      return '${bytes}B';
+    } else if (bytes < 1024 * 1024) {
+      double kb = bytes / 1024;
+      return '${kb.toStringAsFixed(2)}KB';
+    } else if (bytes < 1024 * 1024 * 1024) {
+      double mb = bytes / (1024 * 1024);
+      return '${mb.toStringAsFixed(2)}MB';
+    } else {
+      double gb = bytes / (1024 * 1024 * 1024);
+      return '${gb.toStringAsFixed(2)}GB';
+    }
+  }
 }

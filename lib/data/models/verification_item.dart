@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'dart:convert';
 
 import 'package:isar/isar.dart';
@@ -95,5 +97,17 @@ class VerificationItem {
         counter: counter ?? this.counter,
         used: used ?? this.used,
         id: id ?? this.id);
+  }
+
+  String get uriString {
+    Uri _uri = Uri(scheme: "otpauth", host: type, path: name, queryParameters: {
+      "secrect": key,
+      "issuer": vendor,
+      "algorithm": sha,
+      "digits": length.toString(),
+      "period": time.toString(),
+      "counter": counter.toString()
+    });
+    return _uri.toString();
   }
 }
