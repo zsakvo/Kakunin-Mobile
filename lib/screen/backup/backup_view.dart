@@ -81,7 +81,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     style: titleStyle,
                   ),
                   subtitle: Text(
-                    "当前仅支持 Google Drive",
+                    "当前仅支持Google Drive",
                     style: subTitleStyle,
                   ),
                   onTap: () async {
@@ -128,7 +128,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                   horizontalTitleGap: 0,
                   contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   subtitle: Text(
-                    "您的数据会经过 RSA 加密后存放在云端，但是其对应的公私钥均可以在本应用的源代码中找到，请自行注意保管妥当备份数据。",
+                    "您的数据会经过RSA加密后存放在云端，但是其对应的公私钥均可以在本应用的源代码中找到，请自行注意保管妥当备份数据。",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
@@ -210,7 +210,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     style: titleStyle,
                   ),
                   subtitle: Text(
-                    cloudAccount.localDir != null ? "目前备份于 ${cloudAccount.localDir}" : "尚未选择备份位置",
+                    cloudAccount.localDir != null ? "目前备份于${cloudAccount.localDir}" : "尚未选择备份位置",
                     style: subTitleStyle,
                   ),
                   onTap: () async {
