@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/main.dart';
 import 'package:kakunin/utils/log.dart';
+import 'package:kakunin/utils/snackbar.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -118,8 +119,15 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                 ),
                 trailing: Switch(
                   value: needAuth.value,
-                  onChanged: (value) {
-                    needAuth.value = value;
+                  onChanged: (value) async {
+                    try {
+                      final bool didAuthenticate = await auth.authenticate(localizedReason: '请验证您的身份信息');
+                      if (didAuthenticate) {
+                        needAuth.value = !needAuth.value;
+                      }
+                    } on PlatformException {
+                      showErrorSnackBar("您的系统没有注册任何认证方式");
+                    }
                   },
                   // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
                 ),
@@ -130,14 +138,7 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                       needAuth.value = !needAuth.value;
                     }
                   } on PlatformException {
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(
-                        "您的系统没有注册任何认证方式",
-                        style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
-                      ),
-                      backgroundColor: Theme.of(context).colorScheme.errorContainer,
-                      behavior: SnackBarBehavior.floating,
-                    ));
+                    showErrorSnackBar("您的系统没有注册任何认证方式");
                   }
                 },
               ),

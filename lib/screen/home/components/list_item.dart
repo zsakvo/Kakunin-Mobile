@@ -141,7 +141,7 @@ class ListItemViewState extends ConsumerState<ListItemView> {
         ),
       ),
       onTap: () {
-        FlutterClipboard.copy(token.value).then((value) => ScaffoldMessenger.of(context)
+        FlutterClipboard.copy(token.value.replaceAll(" ", "")).then((value) => ScaffoldMessenger.of(context)
             .showSnackBar(const SnackBar(behavior: SnackBarBehavior.floating, content: Text("验证码复制成功"))));
       },
       onLongPress: () {

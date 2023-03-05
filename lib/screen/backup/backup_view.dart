@@ -121,44 +121,6 @@ class _BackupViewState extends ConsumerState<BackupView> {
                           ref.read(cloudAccountProvider.notifier).login(CloudAccountType.Google, handle: true);
                         },
                       ),
-                Container(
-                  margin: const EdgeInsets.only(top: 16),
-                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                  child: Text(
-                    "云端",
-                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                  ),
-                ),
-                ListTile(
-                  contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                  title: Text(
-                    "备份数据",
-                    style: titleStyle,
-                  ),
-                  subtitle: Text(
-                    "上云有风险，隐私自己管 :_)",
-                    style: subTitleStyle,
-                  ),
-                  onTap: () async {
-                    ref.read(cloudAccountProvider.notifier).backUp();
-                  },
-                ),
-                ListTile(
-                  contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                  title: Text(
-                    "恢复数据",
-                    style: titleStyle,
-                  ),
-                  subtitle: Text(
-                    cloudAccount.gFile == null
-                        ? "暂未找到备份文件"
-                        : "文件大小：${Parse.formatFileSize(cloudAccount.gFile!.size)}\n修改时间：${cloudAccount.gFile!.modifiedTime!.toLocal()}",
-                    style: subTitleStyle,
-                  ),
-                  onTap: () async {
-                    ref.read(cloudAccountProvider.notifier).restoreGoogle();
-                  },
-                ),
                 const Divider(
                   indent: 16,
                   endIndent: 16,
@@ -168,7 +130,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                   horizontalTitleGap: 0,
                   contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   subtitle: Text(
-                    CloudUtil.getHint(CloudAccountType.Google),
+                    "您的数据会经过 RSA 加密后存放在云端，但是其对应的公私钥均可以在本应用的源代码中找到，请自行注意保管妥当备份数据。",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
@@ -176,6 +138,65 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     ),
                   ),
                 ),
+                ...cloudAccount.isLogin
+                    ? [
+                        Container(
+                          margin: const EdgeInsets.only(top: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                          child: Text(
+                            "云端",
+                            style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                          ),
+                        ),
+                        ListTile(
+                          contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                          title: Text(
+                            "备份数据",
+                            style: titleStyle,
+                          ),
+                          subtitle: Text(
+                            "上云有风险，隐私自己管 :_)",
+                            style: subTitleStyle,
+                          ),
+                          onTap: () async {
+                            ref.read(cloudAccountProvider.notifier).backUp();
+                          },
+                        ),
+                        ListTile(
+                          contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                          title: Text(
+                            "恢复数据",
+                            style: titleStyle,
+                          ),
+                          subtitle: Text(
+                            cloudAccount.gFile == null
+                                ? "暂未找到备份文件"
+                                : "文件大小：${Parse.formatFileSize(cloudAccount.gFile!.size)}\n修改时间：${cloudAccount.gFile!.modifiedTime!.toLocal()}",
+                            style: subTitleStyle,
+                          ),
+                          onTap: () async {
+                            ref.read(cloudAccountProvider.notifier).restoreGoogle();
+                          },
+                        ),
+                        const Divider(
+                          indent: 16,
+                          endIndent: 16,
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.help_outline_outlined),
+                          horizontalTitleGap: 0,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                          subtitle: Text(
+                            CloudUtil.getHint(CloudAccountType.Google),
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ]
+                    : [const SizedBox.shrink()],
                 Container(
                   margin: const EdgeInsets.only(top: 16),
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -191,7 +212,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     style: titleStyle,
                   ),
                   subtitle: Text(
-                    "导出明文数据到 /sdcard/Download/kakunin.otp",
+                    cloudAccount.localDir != null ? "目前备份于 ${cloudAccount.localDir}" : "尚未选择备份位置",
                     style: subTitleStyle,
                   ),
                   onTap: () async {

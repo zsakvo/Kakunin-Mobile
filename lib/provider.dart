@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'dart:convert';
-
 import 'dart:io' as io;
 
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
@@ -12,13 +11,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:kakunin/main.dart';
 import 'package:kakunin/router.dart';
 import 'package:kakunin/screen/home/home_model.dart';
 import 'package:kakunin/utils/encode.dart';
 import 'package:kakunin/utils/log.dart';
 import 'package:kakunin/utils/parse.dart';
 import 'package:kakunin/utils/snackbar.dart';
-import 'package:path_provider/path_provider.dart';
 
 enum CloudAccountType { Google, WebDav, DropBox, AliYun }
 
@@ -29,25 +28,60 @@ class CloudAccount {
   final bool isLogin;
   final DriveApi? gDriveApi;
   final File? gFile;
+  final String? localDir;
 
-  CloudAccount({this.isLogin = false, this.user, this.usage, this.total, this.gDriveApi, this.gFile});
+  CloudAccount({this.isLogin = false, this.user, this.usage, this.total, this.gDriveApi, this.gFile, this.localDir});
 
   CloudAccount copyWith(
-      {String? user, String? usage, String? total, bool? isLogin, DriveApi? gDriveApi, final File? gFile}) {
+      {String? user,
+      String? usage,
+      String? total,
+      bool? isLogin,
+      DriveApi? gDriveApi,
+      final File? gFile,
+      String? localDir}) {
     return CloudAccount(
         user: user ?? this.user,
         usage: usage ?? this.usage,
         total: total ?? this.total,
         isLogin: isLogin ?? this.isLogin,
         gDriveApi: gDriveApi ?? this.gDriveApi,
-        gFile: gFile ?? this.gFile);
+        gFile: gFile ?? this.gFile,
+        localDir: localDir ?? this.localDir);
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'user': user,
+      'usage': usage,
+      'total': total,
+      'isLogin': isLogin,
+      'gDriveApi': gDriveApi?.toString(),
+      'gFile': gFile?.toString(),
+      'localDir': localDir,
+    };
+  }
+
+  factory CloudAccount.fromMap(Map<String, dynamic> map) {
+    return CloudAccount(
+      user: map['user'],
+      usage: map['usage'],
+      total: map['total'],
+      isLogin: map['isLogin'] ?? false,
+      gDriveApi: null,
+      gFile: null,
+      localDir: map['localDir'],
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory CloudAccount.fromJson(String source) => CloudAccount.fromMap(json.decode(source));
 }
 
 class CloudAccountNotifier extends StateNotifier<CloudAccount> {
-  CloudAccountNotifier({required this.ref}) : super(CloudAccount(isLogin: false)) {
-    // login();
-  }
+  CloudAccountNotifier({required this.ref})
+      : super(CloudAccount(isLogin: false, localDir: spInstance.getString("localDir")));
   final dynamic ref;
   late CloudAccountType accountType;
   final GoogleSignIn googleSignIn = GoogleSignIn(
@@ -71,12 +105,12 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
             if (googleAccount != null) {
               final client = await googleSignIn.authenticatedClient();
               final driveApi = DriveApi(client!);
-              state = CloudAccount(isLogin: true, user: googleAccount.email, gDriveApi: driveApi);
+              state = state.copyWith(isLogin: true, user: googleAccount.email, gDriveApi: driveApi);
               getQuota();
               searchBackUpFile();
             }
           } else {
-            state = CloudAccount(isLogin: false);
+            state = state.copyWith(isLogin: false);
           }
           break;
         default:
@@ -125,7 +159,7 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
     switch (accountType) {
       case CloudAccountType.Google:
         googleSignIn.signOut();
-        state = CloudAccount(isLogin: false);
+        state = state.copyWith(isLogin: false);
         break;
       default:
     }
@@ -171,16 +205,17 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
 
   backUpLocal() async {
     final text = Encode.clear(ref);
-    late final io.File file;
-    if (io.Platform.isAndroid) {
-      file = io.File("/sdcard/Download/kakunin.otp");
+    String? selectedDirectory = state.localDir ?? await FilePicker.platform.getDirectoryPath();
+    if (selectedDirectory != null) {
+      spInstance.setString("localDir", selectedDirectory);
+      state = state.copyWith(localDir: selectedDirectory);
+      io.File file = io.File("$selectedDirectory/kakunin.otp");
+      file.createSync();
+      file.writeAsStringSync(text);
+      showSnackBar("备份成功");
     } else {
-      final downloadsDir = await getDownloadsDirectory();
-      file = io.File("${downloadsDir!.path}/../kakunin.otp");
+      showErrorSnackBar("请先选好备份位置");
     }
-    file.createSync();
-    file.writeAsStringSync(text);
-    showSnackBar("备份成功");
   }
 
   restoreGoogle() async {
