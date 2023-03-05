@@ -25,9 +25,7 @@ class BackupView extends StatefulHookConsumerWidget {
 }
 
 class _BackupViewState extends ConsumerState<BackupView> {
-  final titleStyle = const TextStyle(
-    fontSize: 20,
-  );
+  final titleStyle = const TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
   final subTitleStyle = const TextStyle(fontSize: 14);
   // final GoogleSignIn googleSignIn = GoogleSignIn(
   //   scopes: [
@@ -276,7 +274,11 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     "更换帐号",
                     style: TextStyle(fontSize: 16),
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    GoRouter.of(context).pop();
+                    ref.read(cloudAccountProvider.notifier).logout();
+                    ref.read(cloudAccountProvider.notifier).login(CloudAccountType.Google, handle: true);
+                  },
                 ),
                 ListTile(
                   dense: true,

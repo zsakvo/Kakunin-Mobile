@@ -101,7 +101,6 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
           if (isSignedIn || (!isSignedIn && handle)) {
             final GoogleSignInAccount? googleAccount =
                 handle ? await googleSignIn.signIn() : await googleSignIn.signInSilently();
-            Log.e(googleAccount.toString());
             if (googleAccount != null) {
               final client = await googleSignIn.authenticatedClient();
               final driveApi = DriveApi(client!);

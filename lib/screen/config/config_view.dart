@@ -22,9 +22,7 @@ class ConfigView extends StatefulHookConsumerWidget {
 
 class _ConfigViewState extends ConsumerState<ConfigView> {
   final LocalAuthentication auth = LocalAuthentication();
-  final titleStyle = const TextStyle(
-    fontSize: 20,
-  );
+  final titleStyle = const TextStyle(fontSize: 20, fontWeight: FontWeight.normal);
   final subTitleStyle = const TextStyle(fontSize: 14);
   checkAuth() async {
     final bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
