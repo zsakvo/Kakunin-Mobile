@@ -21,7 +21,7 @@
 
 - 支持扫描来自 Google 身份验证器的二维码
 - 支持数据导出到本地 （明文）
-- 支持数据备份到 Google 云端硬盘（RSA 加密）
+- 支持数据备份到 Google 云端硬盘（RSA 加密）`相关密钥在 https://github.com/zsakvo/Kakunin-Mobile/blob/main/lib/utils/encode.dart 内`
 - 支持启动时的安全认证
 
 ### init ver.
