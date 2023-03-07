@@ -139,7 +139,6 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
       return null;
     } else {
       var file = res.files!.first;
-      Log.e(file.toJson(), "fff");
       state = state.copyWith(gFile: file);
       return file;
     }
@@ -199,6 +198,7 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
       state.gDriveApi!.files.update(tmpFile, id!, uploadMedia: uploadMedia);
     }
     getQuota();
+    searchBackUpFile();
     showSnackBar("备份成功");
   }
 
