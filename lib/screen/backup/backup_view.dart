@@ -87,7 +87,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     style: titleStyle,
                   ),
                   subtitle: Text(
-                    "选择你的存储位置",
+                    "当前存储于${CloudAccountType.values[accountType.value].name}",
                     style: subTitleStyle,
                   ),
                   onTap: () async {
@@ -123,7 +123,9 @@ class _BackupViewState extends ConsumerState<BackupView> {
                           style: subTitleStyle,
                         ),
                         onTap: () async {
-                          ref.read(cloudAccountProvider.notifier).login(CloudAccountType.Google, handle: true);
+                          ref
+                              .read(cloudAccountProvider.notifier)
+                              .login(CloudAccountType.values[accountType.value], handle: true);
                         },
                       ),
                 const Divider(
