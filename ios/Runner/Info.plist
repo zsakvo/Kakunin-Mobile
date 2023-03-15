@@ -47,5 +47,9 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+  <string>调用相机以扫描二维码</string>
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>从相册读取二维码图片</string>
 </dict>
 </plist>
