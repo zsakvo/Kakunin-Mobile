@@ -35,11 +35,17 @@ class _BackupViewState extends ConsumerState<BackupView> {
   //     // 'https://www.googleapis.com/auth/drive.appfolder'
   //   ],
   // );
+
   @override
   Widget build(BuildContext context) {
-    final isSignedIn = useState(false);
-    final userInfo = useState(json.decode(spInstance.getString("googleAccount") ?? "{}"));
+    // final isSignedIn = useState(false);
+    // final userInfo = useState(json.decode(spInstance.getString("googleAccount") ?? "{}"));
     final cloudAccount = ref.watch(cloudAccountProvider);
+    final accountType = useState(spInstance.getInt("accountType") ?? 0);
+    useEffect(() {
+      spInstance.setInt("accountType", accountType.value);
+      return null;
+    }, [accountType.value]);
     // useEffect(() {
     //   if (isSignedIn.value) {
     //     useMemorizedFuture(() async {
@@ -81,14 +87,15 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     style: titleStyle,
                   ),
                   subtitle: Text(
-                    "当前仅支持Google Drive",
+                    "当前存储于${CloudAccountType.values[accountType.value].name}",
                     style: subTitleStyle,
                   ),
                   onTap: () async {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text("说了只支持Google Drive"),
-                      behavior: SnackBarBehavior.floating,
-                    ));
+                    // ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    //   content: Text("说了只支持Google Drive"),
+                    //   behavior: SnackBarBehavior.floating,
+                    // ));
+                    switchCloud(accountType);
                   },
                 ),
                 cloudAccount.isLogin
@@ -116,7 +123,9 @@ class _BackupViewState extends ConsumerState<BackupView> {
                           style: subTitleStyle,
                         ),
                         onTap: () async {
-                          ref.read(cloudAccountProvider.notifier).login(CloudAccountType.Google, handle: true);
+                          ref
+                              .read(cloudAccountProvider.notifier)
+                              .login(CloudAccountType.values[accountType.value], handle: true);
                         },
                       ),
                 const Divider(
@@ -253,6 +262,86 @@ class _BackupViewState extends ConsumerState<BackupView> {
           )
         ],
       )),
+    );
+  }
+
+  void switchCloud(ValueNotifier<int> accountType) {
+    int val = accountType.value;
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (_) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.all(0.0),
+              title: const Text("云备份位置"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      GoRouter.of(context).pop();
+                    },
+                    child: const Text("取消")),
+                TextButton(
+                    onPressed: () {
+                      accountType.value = val;
+                      GoRouter.of(context).pop();
+                    },
+                    child: const Text("确定"))
+              ],
+              content: Padding(
+                padding: const EdgeInsets.only(top: 12, bottom: 12),
+                child: Wrap(
+                  children: [
+                    RadioListTile(
+                      value: CloudAccountType.Google.index,
+                      groupValue: val,
+                      title: const Text("Google Drive"),
+                      onChanged: (value) {
+                        setState(() {
+                          val = value!;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: CloudAccountType.WebDav.index,
+                      groupValue: val,
+                      title: const Text("WebDav"),
+                      onChanged: (value) {
+                        setState(() {
+                          val = value!;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: CloudAccountType.DropBox.index,
+                      groupValue: val,
+                      title: const Text("DropBox"),
+                      onChanged: (value) {
+                        return;
+                        setState(() {
+                          val = value!;
+                        });
+                      },
+                    ),
+                    RadioListTile(
+                      value: CloudAccountType.AliYun.index,
+                      groupValue: val,
+                      title: const Text("AliYun"),
+                      onChanged: (value) {
+                        return;
+                        setState(() {
+                          val = value!;
+                        });
+                      },
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 
