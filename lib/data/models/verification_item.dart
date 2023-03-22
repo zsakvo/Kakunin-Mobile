@@ -101,7 +101,7 @@ class VerificationItem {
 
   String get uriString {
     Uri _uri = Uri(scheme: "otpauth", host: type, path: name, queryParameters: {
-      "secrect": key,
+      "secret": key,
       "issuer": vendor,
       "algorithm": sha,
       "digits": length.toString(),

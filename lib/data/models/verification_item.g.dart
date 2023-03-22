@@ -52,13 +52,18 @@ const VerificationItemSchema = CollectionSchema(
       name: r'type',
       type: IsarType.string,
     ),
-    r'used': PropertySchema(
+    r'uriString': PropertySchema(
       id: 7,
+      name: r'uriString',
+      type: IsarType.string,
+    ),
+    r'used': PropertySchema(
+      id: 8,
       name: r'used',
       type: IsarType.long,
     ),
     r'vendor': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'vendor',
       type: IsarType.string,
     )
@@ -107,6 +112,7 @@ int _verificationItemEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.uriString.length * 3;
   {
     final value = object.vendor;
     if (value != null) {
@@ -129,8 +135,9 @@ void _verificationItemSerialize(
   writer.writeString(offsets[4], object.sha);
   writer.writeLong(offsets[5], object.time);
   writer.writeString(offsets[6], object.type);
-  writer.writeLong(offsets[7], object.used);
-  writer.writeString(offsets[8], object.vendor);
+  writer.writeString(offsets[7], object.uriString);
+  writer.writeLong(offsets[8], object.used);
+  writer.writeString(offsets[9], object.vendor);
 }
 
 VerificationItem _verificationItemDeserialize(
@@ -148,8 +155,8 @@ VerificationItem _verificationItemDeserialize(
     sha: reader.readStringOrNull(offsets[4]),
     time: reader.readLongOrNull(offsets[5]),
     type: reader.readStringOrNull(offsets[6]),
-    used: reader.readLongOrNull(offsets[7]),
-    vendor: reader.readStringOrNull(offsets[8]),
+    used: reader.readLongOrNull(offsets[8]),
+    vendor: reader.readStringOrNull(offsets[9]),
   );
   return object;
 }
@@ -176,8 +183,10 @@ P _verificationItemDeserializeProp<P>(
     case 6:
       return (reader.readStringOrNull(offset)) as P;
     case 7:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 8:
+      return (reader.readLongOrNull(offset)) as P;
+    case 9:
       return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1191,6 +1200,142 @@ extension VerificationItemQueryFilter
   }
 
   QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      uriStringEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'uriString',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      uriStringGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'uriString',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      uriStringLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'uriString',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      uriStringBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'uriString',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      uriStringStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'uriString',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      uriStringEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'uriString',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      uriStringContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'uriString',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      uriStringMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'uriString',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      uriStringIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'uriString',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
+      uriStringIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'uriString',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterFilterCondition>
       usedIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1520,6 +1665,20 @@ extension VerificationItemQuerySortBy
     });
   }
 
+  QueryBuilder<VerificationItem, VerificationItem, QAfterSortBy>
+      sortByUriString() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uriString', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterSortBy>
+      sortByUriStringDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uriString', Sort.desc);
+    });
+  }
+
   QueryBuilder<VerificationItem, VerificationItem, QAfterSortBy> sortByUsed() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'used', Sort.asc);
@@ -1656,6 +1815,20 @@ extension VerificationItemQuerySortThenBy
     });
   }
 
+  QueryBuilder<VerificationItem, VerificationItem, QAfterSortBy>
+      thenByUriString() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uriString', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VerificationItem, VerificationItem, QAfterSortBy>
+      thenByUriStringDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'uriString', Sort.desc);
+    });
+  }
+
   QueryBuilder<VerificationItem, VerificationItem, QAfterSortBy> thenByUsed() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'used', Sort.asc);
@@ -1734,6 +1907,13 @@ extension VerificationItemQueryWhereDistinct
     });
   }
 
+  QueryBuilder<VerificationItem, VerificationItem, QDistinct>
+      distinctByUriString({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'uriString', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<VerificationItem, VerificationItem, QDistinct> distinctByUsed() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'used');
@@ -1795,6 +1975,12 @@ extension VerificationItemQueryProperty
   QueryBuilder<VerificationItem, String?, QQueryOperations> typeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'type');
+    });
+  }
+
+  QueryBuilder<VerificationItem, String, QQueryOperations> uriStringProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'uriString');
     });
   }
 
