@@ -1,20 +1,13 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:googleapis/drive/v3.dart';
+import 'package:go_router/go_router.dart'; 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:kakunin/hooks/use_memorized_future.dart';
 import 'package:kakunin/main.dart';
 import 'package:kakunin/provider.dart';
 import 'package:kakunin/utils/cloud.dart';
-import 'package:kakunin/utils/encode.dart';
-import 'package:kakunin/utils/log.dart';
-import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:kakunin/utils/parse.dart';
 
 class BackupView extends StatefulHookConsumerWidget {
