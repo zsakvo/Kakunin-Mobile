@@ -53,6 +53,7 @@ class _WebDavViewState extends ConsumerState<WebDavView> {
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 18),
             child: TextField(
               controller: passwordController,
+              obscureText: true,
               decoration: const InputDecoration(
                 isDense: true,
                 labelText: '密码',
