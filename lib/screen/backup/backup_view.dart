@@ -1,9 +1,8 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart'; 
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/main.dart';
 import 'package:kakunin/provider.dart';
@@ -121,6 +120,22 @@ class _BackupViewState extends ConsumerState<BackupView> {
                               .login(CloudAccountType.values[accountType.value], handle: true);
                         },
                       ),
+                accountType.value == 1
+                    ? ListTile(
+                        contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                        title: Text(
+                          "存储位置",
+                          style: titleStyle,
+                        ),
+                        subtitle: Text(
+                          "设定您在WebDav上的默认备份路径",
+                          style: subTitleStyle,
+                        ),
+                        onTap: () async {
+                          ref.read(cloudAccountProvider.notifier).setWebDavPath(context);
+                        },
+                      )
+                    : const SizedBox.shrink(),
                 const Divider(
                   indent: 16,
                   endIndent: 16,

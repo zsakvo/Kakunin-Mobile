@@ -259,6 +259,17 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
     }
     showSnackBar("完成，共恢复了$i条数据");
   }
+
+  storeWebDavAccount({required String url, required String account, required String password}) {
+    state = state.copyWith(isLogin: true);
+    spInstance.setString("davUrl", url);
+    spInstance.setString("davAccount", account);
+    spInstance.setString("davPassword", password);
+  }
+
+  setWebDavPath(context) {
+    GoRouter.of(context).push("/webdavPath");
+  }
 }
 
 final cloudAccountProvider = StateNotifierProvider<CloudAccountNotifier, CloudAccount>((ref) {

@@ -58,7 +58,10 @@ class MyApp extends HookConsumerWidget {
     final defaultDarkColor = ColorScheme.fromSeed(seedColor: colorSeed, brightness: Brightness.dark);
     useEffect(() {
       // initGoogleAccount(context);
-      ref.read(cloudAccountProvider.notifier).login(CloudAccountType.Google);
+      int accountType = spInstance.getInt("accountType") ?? 0;
+      if (accountType == 0) {
+        ref.read(cloudAccountProvider.notifier).login(CloudAccountType.Google);
+      }
       return null;
     }, []);
     return DynamicColorBuilder(

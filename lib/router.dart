@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kakunin/data/models/verification_item.dart';
 import 'package:kakunin/screen/backup/backup_view.dart';
+import 'package:kakunin/screen/backup/webdav_path_view.dart';
 import 'package:kakunin/screen/backup/webdav_view.dart';
 // import 'package:go_router_flow/go_router_flow.dart';
 import 'package:kakunin/screen/code/code_view.dart';
@@ -50,6 +51,10 @@ class AppPages {
     GoRoute(
       path: '/webdav',
       builder: (context, state) => const WebDavView(),
+    ),
+    GoRoute(
+      path: '/webdavPath',
+      builder: (context, state) => const WebDavPathView(),
     )
   ]);
 }
