@@ -61,6 +61,8 @@ class MyApp extends HookConsumerWidget {
       int accountType = spInstance.getInt("accountType") ?? 0;
       if (accountType == 0) {
         ref.read(cloudAccountProvider.notifier).login(CloudAccountType.Google);
+      } else if (accountType == 1) {
+        ref.read(cloudAccountProvider.notifier).checkDavToken();
       }
       return null;
     }, []);

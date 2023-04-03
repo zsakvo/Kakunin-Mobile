@@ -91,19 +91,41 @@ class _BackupViewState extends ConsumerState<BackupView> {
                   },
                 ),
                 cloudAccount.isLogin
-                    ? ListTile(
-                        contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                        title: Text(
-                          cloudAccount.user!,
-                        ),
-                        subtitle: Text(
-                          "${cloudAccount.usage} / ${cloudAccount.total}",
-                          style: subTitleStyle,
-                        ),
-                        onTap: () {
-                          openDialog();
-                        },
-                      )
+                    ? (() {
+                        switch (accountType.value) {
+                          case 0:
+                            return ListTile(
+                              contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                              title: Text(
+                                cloudAccount.user!,
+                              ),
+                              subtitle: Text(
+                                "${cloudAccount.usage} / ${cloudAccount.total}",
+                                style: subTitleStyle,
+                              ),
+                              onTap: () {
+                                openDialog();
+                              },
+                            );
+                          case 1:
+                            return ListTile(
+                              contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                              // ignore: prefer_const_constructors
+                              title: Text(
+                                "当前使用 WebDAV",
+                              ),
+                              subtitle: Text(
+                                "${cloudAccount.davUrl}",
+                                style: subTitleStyle,
+                              ),
+                              onTap: () {
+                                openDialog();
+                              },
+                            );
+                          default:
+                            return const SizedBox.shrink();
+                        }
+                      })()
                     : ListTile(
                         contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                         title: Text(
@@ -128,7 +150,8 @@ class _BackupViewState extends ConsumerState<BackupView> {
                           style: titleStyle,
                         ),
                         subtitle: Text(
-                          "设定您在WebDav上的默认备份路径",
+                          // "设定您在WebDav上的默认备份路径",
+                          "当前存储路径为：${cloudAccount.davPath!}",
                           style: subTitleStyle,
                         ),
                         onTap: () async {

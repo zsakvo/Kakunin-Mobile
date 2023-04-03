@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart';
+import 'package:googleapis/tagmanager/v2.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:kakunin/main.dart';
@@ -19,6 +20,7 @@ import 'package:kakunin/utils/encode.dart';
 import 'package:kakunin/utils/log.dart';
 import 'package:kakunin/utils/parse.dart';
 import 'package:kakunin/utils/snackbar.dart';
+import 'package:webdav_client/webdav_client.dart' as wd;
 
 enum CloudAccountType { Google, WebDav, DropBox, AliYun }
 
@@ -30,8 +32,19 @@ class CloudAccount {
   final DriveApi? gDriveApi;
   final File? gFile;
   final String? localDir;
+  final String? davPath;
+  final String? davUrl;
 
-  CloudAccount({this.isLogin = false, this.user, this.usage, this.total, this.gDriveApi, this.gFile, this.localDir});
+  CloudAccount(
+      {this.isLogin = false,
+      this.user,
+      this.usage,
+      this.total,
+      this.gDriveApi,
+      this.gFile,
+      this.localDir,
+      this.davPath,
+      this.davUrl});
 
   CloudAccount copyWith(
       {String? user,
@@ -40,7 +53,9 @@ class CloudAccount {
       bool? isLogin,
       DriveApi? gDriveApi,
       final File? gFile,
-      String? localDir}) {
+      String? localDir,
+      String? davPath,
+      String? davUrl}) {
     return CloudAccount(
         user: user ?? this.user,
         usage: usage ?? this.usage,
@@ -48,7 +63,9 @@ class CloudAccount {
         isLogin: isLogin ?? this.isLogin,
         gDriveApi: gDriveApi ?? this.gDriveApi,
         gFile: gFile ?? this.gFile,
-        localDir: localDir ?? this.localDir);
+        localDir: localDir ?? this.localDir,
+        davPath: davPath ?? this.davPath,
+        davUrl: davUrl ?? this.davUrl);
   }
 
   Map<String, dynamic> toMap() {
@@ -85,6 +102,7 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
       : super(CloudAccount(isLogin: false, localDir: spInstance.getString("localDir")));
   final dynamic ref;
   late CloudAccountType accountType;
+  late wd.Client davClient;
   final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: [
       'email',
@@ -124,6 +142,25 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
         content: Text(err.toString()),
         behavior: SnackBarBehavior.floating,
       ));
+    }
+  }
+
+  checkDavToken() async {
+    final url = spInstance.getString("davUrl")!;
+    final account = spInstance.getString("davAccount")!;
+    final password = spInstance.getString("davPassword")!;
+    final davPath = spInstance.getString("davPath") ?? "/";
+    davClient = wd.newClient(
+      url,
+      user: account,
+      password: password,
+      debug: true,
+    )..setHeaders({'accept-charset': 'utf-8'});
+    try {
+      await davClient.readDir(davPath);
+      state = state.copyWith(isLogin: true, davPath: davPath, davUrl: url);
+    } catch (err) {
+      Log.e(err);
     }
   }
 
