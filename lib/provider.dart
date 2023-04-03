@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' as io;
+import 'dart:typed_data';
 
 import 'package:extension_google_sign_in_as_googleapis_auth/extension_google_sign_in_as_googleapis_auth.dart';
 import 'package:file_picker/file_picker.dart';
@@ -146,6 +147,7 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
   }
 
   checkDavToken() async {
+    accountType = CloudAccountType.WebDav;
     final url = spInstance.getString("davUrl")!;
     final account = spInstance.getString("davAccount")!;
     final password = spInstance.getString("davPassword")!;
@@ -154,7 +156,7 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
       url,
       user: account,
       password: password,
-      debug: true,
+      debug: false,
     )..setHeaders({'accept-charset': 'utf-8'});
     try {
       await davClient.readDir(davPath);
@@ -204,10 +206,26 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
     }
   }
 
+  backUpWebDav() async {
+    try {
+      final String text = await Encode.rsa(ref);
+      await davClient.write(
+        "${state.davPath!}kakunin.otp",
+        utf8.encode(text) as Uint8List,
+      );
+      showSnackBar("备份成功");
+    } catch (err) {
+      showErrorSnackBar(err.toString());
+    }
+  }
+
   backUp() {
     switch (accountType) {
       case CloudAccountType.Google:
         backUpGoogle();
+        break;
+      case CloudAccountType.WebDav:
+        backUpWebDav();
         break;
       default:
     }
