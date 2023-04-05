@@ -25,6 +25,8 @@ import 'package:webdav_client/webdav_client.dart' as wd;
 
 enum CloudAccountType { Google, WebDav, DropBox, AliYun }
 
+const String defaultFileName = 'kakunin.otp';
+
 class CloudAccount {
   final String? user;
   final String? usage;
@@ -156,7 +158,7 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
       url,
       user: account,
       password: password,
-      debug: false,
+      debug: true,
     )..setHeaders({'accept-charset': 'utf-8'});
     try {
       await davClient.readDir(davPath);
@@ -236,6 +238,9 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
       case CloudAccountType.Google:
         restoreGoogle();
         break;
+      case CloudAccountType.WebDav:
+        restoreWebDav();
+        break;
       default:
     }
   }
@@ -286,6 +291,18 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
       restoreClearString(clearStr);
     } else {
       showErrorSnackBar("没有找到备份文件");
+    }
+  }
+
+  restoreWebDav() async {
+    try {
+      var res = await davClient.read(
+        Uri.encodeComponent(state.davPath! + defaultFileName),
+      );
+      String str = utf8.decode(res);
+    } catch (err) {
+      Log.e(err);
+      showErrorSnackBar(err.toString());
     }
   }
 

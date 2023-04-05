@@ -213,7 +213,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                             style: subTitleStyle,
                           ),
                           onTap: () async {
-                            ref.read(cloudAccountProvider.notifier).restoreGoogle();
+                            ref.read(cloudAccountProvider.notifier).restore();
                           },
                         ),
                         const Divider(
