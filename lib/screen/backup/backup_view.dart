@@ -344,28 +344,28 @@ class _BackupViewState extends ConsumerState<BackupView> {
                         });
                       },
                     ),
-                    RadioListTile(
-                      value: CloudAccountType.DropBox.index,
-                      groupValue: val,
-                      title: const Text("DropBox"),
-                      onChanged: (value) {
-                        return;
-                        setState(() {
-                          val = value!;
-                        });
-                      },
-                    ),
-                    RadioListTile(
-                      value: CloudAccountType.AliYun.index,
-                      groupValue: val,
-                      title: const Text("AliYun"),
-                      onChanged: (value) {
-                        return;
-                        setState(() {
-                          val = value!;
-                        });
-                      },
-                    )
+                    // RadioListTile(
+                    //   value: CloudAccountType.DropBox.index,
+                    //   groupValue: val,
+                    //   title: const Text("DropBox"),
+                    //   onChanged: (value) {
+                    //     return;
+                    //     setState(() {
+                    //       val = value!;
+                    //     });
+                    //   },
+                    // ),
+                    // RadioListTile(
+                    //   value: CloudAccountType.AliYun.index,
+                    //   groupValue: val,
+                    //   title: const Text("AliYun"),
+                    //   onChanged: (value) {
+                    //     return;
+                    //     setState(() {
+                    //       val = value!;
+                    //     });
+                    //   },
+                    // )
                   ],
                 ),
               ),
