@@ -97,12 +97,14 @@ class CloudAccount {
 
   String toJson() => json.encode(toMap());
 
-  factory CloudAccount.fromJson(String source) => CloudAccount.fromMap(json.decode(source));
+  factory CloudAccount.fromJson(String source) =>
+      CloudAccount.fromMap(json.decode(source));
 }
 
 class CloudAccountNotifier extends StateNotifier<CloudAccount> {
   CloudAccountNotifier({required this.ref})
-      : super(CloudAccount(isLogin: false, localDir: spInstance.getString("localDir")));
+      : super(CloudAccount(
+            isLogin: false, localDir: spInstance.getString("localDir")));
   final dynamic ref;
   late CloudAccountType accountType;
   late wd.Client davClient;
@@ -121,12 +123,16 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
         case CloudAccountType.Google:
           bool isSignedIn = await googleSignIn.isSignedIn();
           if (isSignedIn || (!isSignedIn && handle)) {
-            final GoogleSignInAccount? googleAccount =
-                handle ? await googleSignIn.signIn() : await googleSignIn.signInSilently();
+            final GoogleSignInAccount? googleAccount = handle
+                ? await googleSignIn.signIn()
+                : await googleSignIn.signInSilently();
             if (googleAccount != null) {
               final client = await googleSignIn.authenticatedClient();
               final driveApi = DriveApi(client!);
-              state = state.copyWith(isLogin: true, user: googleAccount.email, gDriveApi: driveApi);
+              state = state.copyWith(
+                  isLogin: true,
+                  user: googleAccount.email,
+                  gDriveApi: driveApi);
               getQuota();
               searchBackUpFile();
             }
@@ -135,13 +141,15 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
           }
           break;
         case CloudAccountType.WebDav:
-          GoRouter.of(NavigationService.navigatorKey.currentContext!).push("/webdav");
+          GoRouter.of(NavigationService.navigatorKey.currentContext!)
+              .push("/webdav");
           break;
         default:
       }
     } catch (err) {
       Log.e(err.toString(), "catchErr");
-      ScaffoldMessenger.of(NavigationService.navigatorKey.currentContext!).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(NavigationService.navigatorKey.currentContext!)
+          .showSnackBar(SnackBar(
         content: Text(err.toString()),
         behavior: SnackBarBehavior.floating,
       ));
@@ -178,8 +186,10 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
   }
 
   searchGoogleBakFile() async {
-    var res = await state.gDriveApi!.files
-        .list(q: "name='kakunin.otp'", $fields: "files(modifiedTime,id,name,createdTime,version,size,md5Checksum)");
+    var res = await state.gDriveApi!.files.list(
+        q: "name='kakunin.otp'",
+        $fields:
+            "files(modifiedTime,id,name,createdTime,version,size,md5Checksum)");
     if (res.files!.isEmpty) {
       return null;
     } else {
@@ -268,7 +278,8 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
 
   backUpLocal() async {
     final text = Encode.clear(ref);
-    String? selectedDirectory = state.localDir ?? await FilePicker.platform.getDirectoryPath();
+    String? selectedDirectory =
+        state.localDir ?? await FilePicker.platform.getDirectoryPath();
     if (selectedDirectory != null) {
       spInstance.setString("localDir", selectedDirectory);
       state = state.copyWith(localDir: selectedDirectory);
@@ -284,7 +295,8 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
   restoreGoogle() async {
     final File? gFile = state.gFile;
     if (gFile != null) {
-      final file = await state.gDriveApi!.files.get(gFile.id!, downloadOptions: DownloadOptions.fullMedia) as Media;
+      final file = await state.gDriveApi!.files
+          .get(gFile.id!, downloadOptions: DownloadOptions.fullMedia) as Media;
       final bytes = await streamToList(file.stream);
       String str = utf8.decode(bytes);
       String clearStr = await Encode.decode(str);
@@ -300,6 +312,7 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
         Uri.encodeComponent(state.davPath! + defaultFileName),
       );
       String str = utf8.decode(res);
+      Log.e(str, "str");
     } catch (err) {
       Log.e(err);
       showErrorSnackBar(err.toString());
@@ -307,8 +320,10 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
   }
 
   restoreLocal() async {
-    FilePickerResult? result =
-        await FilePicker.platform.pickFiles(dialogTitle: "选择您的备份文件", type: FileType.custom, allowedExtensions: ["otp"]);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+        dialogTitle: "选择您的备份文件",
+        type: FileType.custom,
+        allowedExtensions: ["otp"]);
     if (result != null) {
       io.File file = io.File(result.files.single.path!);
       String clearStr = file.readAsStringSync();
@@ -321,18 +336,27 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
 
   restoreClearString(String clearStr) {
     var items = json.decode(clearStr) as List;
-    var localItems = ref.read(verificationItemsProvider.notifier).state.map((e) => e.item.uriString).toList() as List;
+    var localItems = ref
+        .read(verificationItemsProvider.notifier)
+        .state
+        .map((e) => e.item.uriString)
+        .toList() as List;
     int i = 0;
     for (var item in items) {
       if (!localItems.contains(item)) {
-        ref.read(verificationItemsProvider.notifier).insertItem(Parse.uri(item));
+        ref
+            .read(verificationItemsProvider.notifier)
+            .insertItem(Parse.uri(item));
         i++;
       }
     }
     showSnackBar("完成，共恢复了$i条数据");
   }
 
-  storeWebDavAccount({required String url, required String account, required String password}) {
+  storeWebDavAccount(
+      {required String url,
+      required String account,
+      required String password}) {
     state = state.copyWith(isLogin: true);
     spInstance.setString("davUrl", url);
     spInstance.setString("davAccount", account);
@@ -344,13 +368,15 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
   }
 }
 
-final cloudAccountProvider = StateNotifierProvider<CloudAccountNotifier, CloudAccount>((ref) {
+final cloudAccountProvider =
+    StateNotifierProvider<CloudAccountNotifier, CloudAccount>((ref) {
   return CloudAccountNotifier(ref: ref);
 });
 
 Future<List<int>> streamToList(Stream<List<int>> stream) async {
   final completer = Completer<List<int>>();
-  final sink = ByteConversionSink.withCallback((bytes) => completer.complete(bytes));
+  final sink =
+      ByteConversionSink.withCallback((bytes) => completer.complete(bytes));
 
   await stream.listen(sink.add).asFuture();
   sink.close();

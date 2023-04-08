@@ -64,7 +64,9 @@ dependencies:
   fast_rsa: ^3.5.6
   path_provider: ^2.0.13
   file_picker: ^5.2.5
-  webdav_client: ^1.2.0
+  webdav_client:
+    git:
+      url: https://github.com/zsakvo/webdav_client.git
 
 dev_dependencies:
   flutter_test:

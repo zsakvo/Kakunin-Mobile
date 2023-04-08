@@ -221,10 +221,10 @@ packages:
     dependency: transitive
     description:
       name: dio
-      sha256: "3709d74615bba5e443eb141f6a7f4bcc4788f8fae6f743edadfb79c2a8e6287e"
+      sha256: "0894a098594263fe1caaba3520e3016d8a855caeb010a882273189cca10f11e9"
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.1"
+    version: "5.1.1"
   dynamic_color:
     dependency: "direct main"
     description:
@@ -1160,10 +1160,11 @@ packages:
   webdav_client:
     dependency: "direct main"
     description:
-      name: webdav_client
-      sha256: bfd8e4a9dc8fe5014d3f6e681e00a3e54fad710e33938d6746d97f67614b5bda
-      url: "https://pub.dev"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: e111883ebc675e858f183a3dd14b0849310904be
+      url: "https://github.com/zsakvo/webdav_client.git"
+    source: git
     version: "1.2.0"
   win32:
     dependency: transitive
