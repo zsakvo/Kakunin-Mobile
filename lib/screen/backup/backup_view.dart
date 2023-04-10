@@ -9,6 +9,8 @@ import 'package:kakunin/provider.dart';
 import 'package:kakunin/utils/cloud.dart';
 import 'package:kakunin/utils/parse.dart';
 
+import '../../utils/log.dart';
+
 class BackupView extends StatefulHookConsumerWidget {
   const BackupView({super.key});
 
@@ -207,9 +209,18 @@ class _BackupViewState extends ConsumerState<BackupView> {
                             style: titleStyle,
                           ),
                           subtitle: Text(
-                            cloudAccount.gFile == null
-                                ? "暂未找到备份文件"
-                                : "文件大小：${Parse.formatFileSize(cloudAccount.gFile!.size)}\n修改时间：${cloudAccount.gFile!.modifiedTime!.toLocal()}",
+                            (() {
+                              switch (accountType.value) {
+                                case 0:
+                                  return cloudAccount.gFile == null
+                                      ? "暂未找到备份文件"
+                                      : "文件大小：${Parse.formatFileSize(cloudAccount.gFile!.size)}\n修改时间：${cloudAccount.gFile!.modifiedTime!.toLocal()}";
+                                default:
+                                  return cloudAccount.davFileTime == null
+                                      ? "未找到备份文件"
+                                      : "文件大小：${cloudAccount.davFileSize}\n修改时间：${cloudAccount.davFileTime}";
+                              }
+                            })(),
                             style: subTitleStyle,
                           ),
                           onTap: () async {
@@ -225,7 +236,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                           horizontalTitleGap: 0,
                           contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                           subtitle: Text(
-                            CloudUtil.getHint(CloudAccountType.Google),
+                            CloudUtil.getHint(CloudAccountType.values[accountType.value]),
                             textAlign: TextAlign.justify,
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
