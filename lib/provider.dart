@@ -205,8 +205,6 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
 
   searchWebDavFile() async {
     var res = await davClient.readProps(state.davPath! + defaultFileName);
-    res.size;
-    res.mTime;
     if (res.size != null && res.mTime != null) {
       state = state.copyWith(
           davFileTime: res.mTime!.toLocal().toString(), davFileSize: Parse.formatFileSize(res.size!.toString()));
@@ -327,7 +325,8 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
         Uri.encodeComponent(state.davPath! + defaultFileName),
       );
       String str = utf8.decode(res);
-      Log.e(str, "str");
+      String clearStr = await Encode.decode(str);
+      restoreClearString(clearStr);
     } catch (err) {
       Log.e(err);
       showErrorSnackBar(err.toString());
