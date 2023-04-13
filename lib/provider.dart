@@ -161,6 +161,15 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
     }
   }
 
+  checkLogin(CloudAccountType type) async {
+    state = state.copyWith(isLogin: false);
+    if (type == CloudAccountType.Google) {
+      login(type);
+    } else {
+      checkDavToken();
+    }
+  }
+
   checkDavToken() async {
     accountType = CloudAccountType.WebDav;
     final url = spInstance.getString("davUrl")!;

@@ -326,6 +326,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     child: const Text("取消")),
                 TextButton(
                     onPressed: () {
+                      ref.read(cloudAccountProvider.notifier).checkLogin(CloudAccountType.values[val]);
                       accountType.value = val;
                       GoRouter.of(context).pop();
                     },
