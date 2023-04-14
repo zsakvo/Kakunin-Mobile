@@ -1,38 +1,38 @@
-<h3 align="center">踟蹰 - MD3 风格的二步验证工具</h3>
-<p align="center">  
-请注意，项目尚在开发中。如果遇到任何问题和建议欢迎在 issues 中讨论
-</p>
-<br/>
-<p align="center">  <img width="240" src="https://user-images.githubusercontent.com/25399519/221909358-bf6faac0-f7bb-4943-9ead-13d424bec9e8.png" title="Main Screenshot">
-<img width="240" src="https://user-images.githubusercontent.com/25399519/222937733-96736a21-fe4e-43a9-ae2b-55bdc3f33b5b.png"  >
-<img width="240" src="https://user-images.githubusercontent.com/25399519/222937731-6866a857-0e32-495a-81d9-51d3b6d552db.png"  > 
-</p>
-</a>
-<br/>
- 
-## 免责声明
-- ⚠️ 本项目正在 **随缘** 的开发中。
-- ⚠️ 可能存在 bug 或者重大变更。
-- ⚠️ **暂时不要把本软件作为你验证的唯一工具!**
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## 特性
+## Getting Started
 
-### 2023.03.05
+First, run the development server:
 
-- 支持扫描来自 Google 身份验证器的二维码
-- 支持数据导出到本地 （明文）
-- 支持数据备份到 Google 云端硬盘（RSA 加密）`相关密钥在 https://github.com/zsakvo/Kakunin-Mobile/blob/main/lib/utils/encode.dart 内`
-- 支持启动时的安全认证
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
 
-### init ver.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-- 支持 TOTP 以及 HOTP
-- 支持手动输入参数，扫码，解析 `otpauth://` 三种导入方式
-- 支持动态取色
+You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-## 待开发
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-- 云备份支持更多来源
-- 导出数据为其它 APP 的兼容格式
-- 导入更多来自其它程序的数据
-- 完成 iOS 支持
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
