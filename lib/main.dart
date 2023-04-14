@@ -108,4 +108,4 @@ final monetEnableProvider = StateProvider((ref) => spInstance.getBool("dynamicCo
 
 bool supportMonet = false;
 
-Locale locale = Locale("zh", "CN");
+Locale locale = Locale("ja", "JP");

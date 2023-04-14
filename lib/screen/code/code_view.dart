@@ -8,6 +8,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:kakunin/data/models/verification_item.dart';
 import 'package:kakunin/screen/home/home_model.dart';
+import 'package:kakunin/utils/i18n.dart';
 
 import 'components/otp_view.dart';
 
@@ -49,7 +50,7 @@ class _CodeViewState extends ConsumerState<CodeView> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar.large(
-            title: const Text("添加新条目"),
+            title: Text("Add New Item".i18n),
             pinned: true,
             leading: Transform.translate(
               offset: const Offset(0, 4),
@@ -74,7 +75,7 @@ class _CodeViewState extends ConsumerState<CodeView> {
               top = constraints.biggest.height;
               return FlexibleSpaceBar(
                 title: Text(
-                  "添加新条目",
+                  "Add New Item".i18n,
                   style: TextStyle(color: Theme.of(context).textTheme.titleLarge?.color),
                 ),
                 centerTitle: false,
@@ -153,7 +154,7 @@ class _CodeViewState extends ConsumerState<CodeView> {
         },
         label: Transform.translate(
           offset: const Offset(0, -1.4),
-          child: const Text("保存"),
+          child: Text("Save".i18n),
         ),
         icon: const Icon(Icons.add),
       ),

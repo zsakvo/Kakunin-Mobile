@@ -180,18 +180,18 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
     showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('从 URI 导入'),
+        title: Text('Import from URI'.i18n),
         content: TextField(
           controller: uriController,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             isDense: true,
-            labelText: 'URI 链接',
-            border: OutlineInputBorder(),
+            labelText: 'URI Link'.i18n,
+            border: const OutlineInputBorder(),
           ),
         ),
         actions: <Widget>[
           FilledButton(
-            child: const Text('导入'),
+            child: Text('Import'.i18n),
             onPressed: () {
               Navigator.of(context).pop();
               var res = Parse.uri(uriController.text);
@@ -201,7 +201,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                   behavior: SnackBarBehavior.floating,
                   content: Text(
-                    "您导入的 Uri 链接不包含有效数据",
+                    "The URI link you imported does not contain valid data.".i18n,
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                   backgroundColor: Theme.of(context).colorScheme.errorContainer,

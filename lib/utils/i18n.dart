@@ -154,6 +154,42 @@ extension Localization on String {
       "zh_cn": "第三方声明",
       "zh_tw": "第三方聲明",
       "ja_jp": "第三者の免責事項"
+    },
+    "Import from URI": {"en_us": "Import from URI", "zh_cn": "从 URI 导入", "zh_tw": "從 URI 匯入", "ja_jp": "URI からのインポート"},
+    "URI Link": {"en_us": "URI Link", "zh_cn": "URI 链接", "zh_tw": "URI 連結", "ja_jp": "URI リンク"},
+    "Import": {"en_us": "Import", "zh_cn": "导入", "zh_tw": "匯入", "ja_jp": "インポート"},
+    "The URI link you imported does not contain valid data.": {
+      "en_us": "The URI link you imported does not contain valid data.",
+      "zh_cn": "您导入的 URI 链接不包含有效数据。",
+      "zh_tw": "您匯入的 URI 連結不包含有效資料。",
+      "ja_jp": "インポートした URI リンクには有効なデータが含まれていません。"
+    },
+    "Add New Item": {"en_us": "Add New Item", "zh_cn": "添加新条目", "zh_tw": "新增項目", "ja_jp": "新しい項目を追加する"},
+    "Save": {"en_us": "Save", "zh_cn": "保存", "zh_tw": "儲存", "ja_jp": "保存"},
+    "Name": {"en_us": "Name", "zh_cn": "名称", "zh_tw": "名稱", "ja_jp": "名前"},
+    "Service Provider": {"en_us": "Service Provider", "zh_cn": "服务商", "zh_tw": "服務提供者", "ja_jp": "サービスプロバイダー"},
+    "Access Key": {"en_us": "Access Key", "zh_cn": "密钥", "zh_tw": "金鑰", "ja_jp": "アクセスキー"},
+    "Time Interval": {"en_us": "Time Interval", "zh_cn": "时间间隔", "zh_tw": "時間間隔", "ja_jp": "時間間隔"},
+    "Counter": {"en_us": "Counter", "zh_cn": "计数器", "zh_tw": "計數器", "ja_jp": "カウンター"},
+    "Digits": {"en_us": "Digits", "zh_cn": "位数", "zh_tw": "位數", "ja_jp": "桁数"},
+    "Hash Function": {"en_us": "Hash Function", "zh_cn": "哈希函数", "zh_tw": "雜湊函數", "ja_jp": "ハッシュ関数"},
+    "Name cannot be empty": {
+      "en_us": "Name cannot be empty",
+      "zh_cn": "名称不可为空",
+      "zh_tw": "名稱不可為空",
+      "ja_jp": "名称は空にできません"
+    },
+    "Access Key cannot be empty": {
+      "en_us": "Access Key cannot be empty",
+      "zh_cn": "密钥不能为空",
+      "zh_tw": "金鑰不能為空",
+      "ja_jp": "アクセスキーは空にできません"
+    },
+    "Access Key is not a valid Base32 encoding": {
+      "en_us": "Access Key is not a valid Base32 encoding",
+      "zh_cn": "密钥不是有效的 Base32 编码",
+      "zh_tw": "金鑰不是有效的 Base32 編碼",
+      "ja_jp": "アクセスキーは有効な Base32 エンコーディングではありません"
     }
   });
 

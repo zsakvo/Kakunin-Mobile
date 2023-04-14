@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/components/dropdown_menu.dart';
 import 'package:kakunin/data/models/verification_item.dart';
 import 'package:base32/base32.dart';
+import 'package:kakunin/utils/i18n.dart';
 
 enum VerifyType { totp, hotp }
 
@@ -42,17 +43,17 @@ class OtpViewState extends ConsumerState<OtpView> {
             child: TextField(
               controller: nameController,
               decoration: InputDecoration(
-                  isDense: true, labelText: '名称', border: const OutlineInputBorder(), errorText: nameErrorText),
+                  isDense: true, labelText: 'Name'.i18n, border: const OutlineInputBorder(), errorText: nameErrorText),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 24),
             child: TextField(
               controller: vendorController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 isDense: true,
-                labelText: '服务商',
-                border: OutlineInputBorder(),
+                labelText: "Service Provider".i18n,
+                border: const OutlineInputBorder(),
               ),
             ),
           ),
@@ -61,7 +62,10 @@ class OtpViewState extends ConsumerState<OtpView> {
             child: TextField(
               controller: keyController,
               decoration: InputDecoration(
-                  isDense: true, labelText: '密钥', border: const OutlineInputBorder(), errorText: keyErrorText),
+                  isDense: true,
+                  labelText: "Access Key".i18n,
+                  border: const OutlineInputBorder(),
+                  errorText: keyErrorText),
             ),
           ),
           Padding(
@@ -71,20 +75,20 @@ class OtpViewState extends ConsumerState<OtpView> {
                 child: widget.verifyType == VerifyType.totp
                     ? TextField(
                         controller: timeController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           isDense: true,
-                          labelText: '时间间隔',
-                          border: OutlineInputBorder(),
+                          labelText: 'Time Interval'.i18n,
+                          border: const OutlineInputBorder(),
                         ),
                         keyboardType: TextInputType.number,
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       )
                     : TextField(
                         controller: counterController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           isDense: true,
-                          labelText: '计数器',
-                          border: OutlineInputBorder(),
+                          labelText: 'Counter'.i18n,
+                          border: const OutlineInputBorder(),
                         ),
                         keyboardType: TextInputType.number,
                         inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -96,10 +100,10 @@ class OtpViewState extends ConsumerState<OtpView> {
               Flexible(
                 child: TextField(
                   controller: lengthController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     isDense: true,
-                    labelText: '位数',
-                    border: OutlineInputBorder(),
+                    labelText: 'Digits'.i18n,
+                    border: const OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -116,7 +120,7 @@ class OtpViewState extends ConsumerState<OtpView> {
                   initialSelection: "SHA1",
                   enableSearch: false,
                   enableFilter: false,
-                  label: const Text('哈希函数'),
+                  label: Text('Hash Function'.i18n),
                   dropdownMenuEntries: const [
                     DropdownMenuEntry(
                       label: "SHA1",
@@ -140,7 +144,7 @@ class OtpViewState extends ConsumerState<OtpView> {
 
   verify() {
     if (nameController.text.trim().isEmpty) {
-      nameErrorText = "名称不可为空";
+      nameErrorText = "Name cannot be empty".i18n;
       valid = false;
     } else {
       nameErrorText = null;
@@ -148,13 +152,13 @@ class OtpViewState extends ConsumerState<OtpView> {
     }
 
     if (keyController.text.isEmpty) {
-      keyErrorText = "密钥不能为空";
+      keyErrorText = "Access Key cannot be empty".i18n;
     } else {
       try {
         base32.decodeAsHexString(keyController.text);
         valid = true;
       } catch (err) {
-        keyErrorText = "密钥不是有效的 Base32 编码";
+        keyErrorText = "Access Key is not a valid Base32 encoding".i18n;
         valid = false;
       }
     }
@@ -200,5 +204,5 @@ class OtpViewState extends ConsumerState<OtpView> {
 }
 
 checkName(String str) {
-  return str.isEmpty ? "名称不可为空" : null;
+  return str.isEmpty ? "Name cannot be empty".i18n : null;
 }
