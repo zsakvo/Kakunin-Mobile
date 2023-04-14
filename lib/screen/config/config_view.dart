@@ -14,6 +14,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'components/color.dart';
 
+enum Language { en, cn, tw, jp }
+
+const LanguageStrings = ["English", "简体中文", "繁體中文", "日本語"];
+
 class ConfigView extends StatefulHookConsumerWidget {
   const ConfigView({super.key});
 
@@ -101,6 +105,17 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                         style: subTitleStyle,
                       ),
                     ),
+              ListTile(
+                contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                title: Text("Switch Language".i18n, style: titleStyle),
+                onTap: () {
+                  switchLanguage(ref);
+                },
+                subtitle: Text(
+                  "The default setting is usually fine".i18n,
+                  style: subTitleStyle,
+                ),
+              ),
               Container(
                 margin: const EdgeInsets.only(top: 16),
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -197,5 +212,57 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
             ]))
           ],
         ));
+  }
+
+  void switchLanguage(WidgetRef ref) {
+    int val = ref.watch(localeProvider);
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (_) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.all(0.0),
+              title: Text("Switch Language".i18n),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      int val = spInstance.getInt("locale") ?? 1;
+                      ref.read(localeProvider.notifier).state = val;
+                      GoRouter.of(context).pop();
+                    },
+                    child: Text("Cancel".i18n)),
+                TextButton(
+                    onPressed: () {
+                      // ref.read(cloudAccountProvider.notifier).checkLogin(CloudAccountType.values[val]);
+                      // accountType.value = val;
+                      spInstance.setInt("locale", val);
+                      GoRouter.of(context).pop();
+                    },
+                    child: Text("OK".i18n))
+              ],
+              content: Padding(
+                padding: const EdgeInsets.only(top: 12, bottom: 12),
+                child: Wrap(
+                    children: Language.values
+                        .map((e) => RadioListTile(
+                              value: e.index,
+                              groupValue: val,
+                              title: Text(LanguageStrings[e.index]),
+                              onChanged: (value) {
+                                setState(() {
+                                  val = value!;
+                                  ref.read(localeProvider.notifier).state = value;
+                                });
+                              },
+                            ))
+                        .toList()),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

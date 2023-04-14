@@ -19,45 +19,45 @@ class AppPages {
   static GoRouter router = GoRouter(navigatorKey: NavigationService.navigatorKey, routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => getI18nWidget(child: const HomeView()),
+      builder: (context, state) => const HomeView(),
     ),
     GoRoute(
       path: '/code',
       builder: (context, state) {
         VerificationItem? item = state.extra as VerificationItem?;
-        return getI18nWidget(child: CodeView(item: item));
+        return CodeView(item: item);
       },
     ),
     GoRoute(
       path: '/scan',
-      builder: (context, state) => getI18nWidget(child: const ScanView()),
+      builder: (context, state) => const ScanView(),
     ),
     GoRoute(
       path: '/config',
-      builder: (context, state) => getI18nWidget(child: const ConfigView()),
+      builder: (context, state) => const ConfigView(),
     ),
     GoRoute(
       path: '/libs',
-      builder: (context, state) => getI18nWidget(child: const LibsView()),
+      builder: (context, state) => const LibsView(),
     ),
     GoRoute(
       path: '/lib_detail',
       builder: (context, state) {
         String lib = state.extra as String;
-        return getI18nWidget(child: LibDetailView(lib: lib));
+        return LibDetailView(lib: lib);
       },
     ),
     GoRoute(
       path: '/backup',
-      builder: (context, state) => getI18nWidget(child: const BackupView()),
+      builder: (context, state) => const BackupView(),
     ),
     GoRoute(
       path: '/webdav',
-      builder: (context, state) => getI18nWidget(child: const WebDavView()),
+      builder: (context, state) => const WebDavView(),
     ),
     GoRoute(
       path: '/webdavPath',
-      builder: (context, state) => getI18nWidget(child: const WebDavPathView()),
+      builder: (context, state) => const WebDavPathView(),
     )
   ]);
 }
