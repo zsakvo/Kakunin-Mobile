@@ -50,3 +50,5 @@ ios/Runner/GoogleService-Info.plist
 macos/Runner/GoogleService-Info.plist
 ios/firebase_app_id_file.json
 macos/firebase_app_id_file.json
+node_modules
+node_modules
