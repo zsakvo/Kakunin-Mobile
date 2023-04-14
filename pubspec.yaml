@@ -67,6 +67,9 @@ dependencies:
   webdav_client:
     git:
       url: https://github.com/zsakvo/webdav_client.git
+  i18n_extension: ^8.0.0
+  flutter_localizations:
+    sdk: flutter
 
 dev_dependencies:
   flutter_test:

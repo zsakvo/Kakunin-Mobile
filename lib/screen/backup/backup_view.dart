@@ -7,6 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/main.dart';
 import 'package:kakunin/provider.dart';
 import 'package:kakunin/utils/cloud.dart';
+import 'package:kakunin/utils/i18n.dart';
 import 'package:kakunin/utils/parse.dart';
 
 import '../../utils/log.dart';
@@ -57,7 +58,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
     // }, [isSignedIn.value]);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("备份和恢复"),
+        title: Text("Backup and Restore".i18n),
         elevation: 4,
       ),
       body: SafeArea(
@@ -70,18 +71,18 @@ class _BackupViewState extends ConsumerState<BackupView> {
                   margin: const EdgeInsets.only(top: 16),
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   child: Text(
-                    "帐户",
+                    "Account".i18n,
                     style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 ListTile(
                   contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                   title: Text(
-                    "云连接类型",
+                    "Cloud Connection Type".i18n,
                     style: titleStyle,
                   ),
                   subtitle: Text(
-                    "当前存储于${CloudAccountType.values[accountType.value].name}",
+                    "${"Current Storage Location".i18n} ${CloudAccountType.values[accountType.value].name}",
                     style: subTitleStyle,
                   ),
                   onTap: () async {
@@ -114,7 +115,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                               contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                               // ignore: prefer_const_constructors
                               title: Text(
-                                "当前使用 WebDAV",
+                                "${"Current Usage".i18n} WebDAV",
                               ),
                               subtitle: Text(
                                 "${cloudAccount.davUrl}",
@@ -131,11 +132,11 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     : ListTile(
                         contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                         title: Text(
-                          "登录账户",
+                          "Login Account".i18n,
                           style: titleStyle,
                         ),
                         subtitle: Text(
-                          "可能需要你有可靠的网络条件",
+                          "You may need a reliable network connection.".i18n,
                           style: subTitleStyle,
                         ),
                         onTap: () async {
@@ -148,12 +149,12 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     ? ListTile(
                         contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                         title: Text(
-                          "存储位置",
+                          "Storage location".i18n,
                           style: titleStyle,
                         ),
                         subtitle: Text(
                           // "设定您在WebDav上的默认备份路径",
-                          "当前存储路径为：${cloudAccount.davPath!}",
+                          "Current storage path".i18n + cloudAccount.davPath!,
                           style: subTitleStyle,
                         ),
                         onTap: () async {
@@ -170,7 +171,8 @@ class _BackupViewState extends ConsumerState<BackupView> {
                   horizontalTitleGap: 0,
                   contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   subtitle: Text(
-                    "您的数据会经过RSA加密后存放在云端，但是其对应的公私钥均可以在本应用的源代码中找到，请自行注意保管妥当备份数据。",
+                    "Your data will be encrypted using RSA before being stored in the cloud. However, the corresponding public and private keys can be found in the source code of this application. Please be cautious and ensure proper backup of your data."
+                        .i18n,
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
@@ -250,18 +252,20 @@ class _BackupViewState extends ConsumerState<BackupView> {
                   margin: const EdgeInsets.only(top: 16),
                   padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   child: Text(
-                    "本地",
+                    "Local".i18n,
                     style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
                 ListTile(
                   contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                   title: Text(
-                    "导出备份",
+                    "Export Backup".i18n,
                     style: titleStyle,
                   ),
                   subtitle: Text(
-                    cloudAccount.localDir != null ? "目前备份于${cloudAccount.localDir}" : "尚未选择备份位置",
+                    cloudAccount.localDir != null
+                        ? "${"Currently backed up in".i18n} ${cloudAccount.localDir}"
+                        : "尚未选择备份位置",
                     style: subTitleStyle,
                   ),
                   onTap: () async {
@@ -271,11 +275,11 @@ class _BackupViewState extends ConsumerState<BackupView> {
                 ListTile(
                   contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                   title: Text(
-                    "导入备份文件",
+                    "Import backup file".i18n,
                     style: titleStyle,
                   ),
                   subtitle: Text(
-                    "暂时只支持应用本身的导出数据",
+                    "Only supports exporting data from the application itself".i18n,
                     style: subTitleStyle,
                   ),
                   onTap: () async {
@@ -291,7 +295,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                   horizontalTitleGap: 0,
                   contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   subtitle: Text(
-                    "本地导出的数据是明文的，所以请您自行保管好备份文件，以免引起不必要的风险和损失",
+                    "Only supports exporting data from the application itself".i18n,
                     textAlign: TextAlign.justify,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
@@ -317,20 +321,20 @@ class _BackupViewState extends ConsumerState<BackupView> {
           builder: (context, setState) {
             return AlertDialog(
               contentPadding: const EdgeInsets.all(0.0),
-              title: const Text("云备份位置"),
+              title: Text("Cloud backup location".i18n),
               actions: [
                 TextButton(
                     onPressed: () {
                       GoRouter.of(context).pop();
                     },
-                    child: const Text("取消")),
+                    child: Text("Cancel".i18n)),
                 TextButton(
                     onPressed: () {
                       ref.read(cloudAccountProvider.notifier).checkLogin(CloudAccountType.values[val]);
                       accountType.value = val;
                       GoRouter.of(context).pop();
                     },
-                    child: const Text("确定"))
+                    child: Text("OK".i18n))
               ],
               content: Padding(
                 padding: const EdgeInsets.only(top: 12, bottom: 12),
@@ -395,16 +399,16 @@ class _BackupViewState extends ConsumerState<BackupView> {
       builder: (_) {
         return AlertDialog(
           contentPadding: const EdgeInsets.all(6.0),
-          title: const Text("云备份账户"),
+          title: Text("Cloud backup account".i18n),
           content: Padding(
             padding: const EdgeInsets.only(top: 12, bottom: 12),
             child: Wrap(
               children: [
                 ListTile(
                   dense: true,
-                  title: const Text(
-                    "更换帐号",
-                    style: TextStyle(fontSize: 16),
+                  title: Text(
+                    "Change account".i18n,
+                    style: const TextStyle(fontSize: 16),
                   ),
                   onTap: () {
                     GoRouter.of(context).pop();
@@ -414,9 +418,9 @@ class _BackupViewState extends ConsumerState<BackupView> {
                 ),
                 ListTile(
                   dense: true,
-                  title: const Text(
-                    "登出",
-                    style: TextStyle(fontSize: 16),
+                  title: Text(
+                    "Logout".i18n,
+                    style: const TextStyle(fontSize: 16),
                   ),
                   onTap: () {
                     GoRouter.of(context).pop();

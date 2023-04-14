@@ -12,6 +12,8 @@ import 'package:kakunin/utils/log.dart';
 import 'package:kakunin/utils/parse.dart';
 import 'package:local_auth/local_auth.dart';
 
+import 'package:kakunin/utils/i18n.dart';
+
 class HomeView extends StatefulHookConsumerWidget {
   const HomeView({super.key});
 
@@ -39,7 +41,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
       if (!needAuth) {
         return true;
       } else {
-        final bool didAuthenticate = await auth.authenticate(localizedReason: '请验证您的身份信息');
+        final bool didAuthenticate = await auth.authenticate(localizedReason: "Verify Your Identity".i18n);
         return (didAuthenticate);
       }
     }
@@ -81,7 +83,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Transform.translate(offset: const Offset(0, -2), child: const Text("身份验证器")),
+        title: Transform.translate(offset: const Offset(0, -2), child: Text("Two-Factor Authentication".i18n)),
         elevation: 4,
         actions: [
           IconButton(
@@ -124,7 +126,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
                     leading: const Icon(Icons.camera),
                     title: Transform.translate(
                       offset: const Offset(0, -1.2),
-                      child: const Text('扫描二维码'),
+                      child: Text("Scan QR Code".i18n),
                     ),
                     onTap: () async {
                       GoRouter.of(context).pop();
@@ -143,7 +145,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
                   // ),
                   ListTile(
                     leading: const Icon(Icons.grid_view_rounded),
-                    title: Transform.translate(offset: const Offset(0, -1.2), child: const Text('手动输入')),
+                    title: Transform.translate(offset: const Offset(0, -1.2), child: Text("Manual Input".i18n)),
                     onTap: () async {
                       GoRouter.of(context).pop();
                       GoRouter.of(context).push("/code");
@@ -151,7 +153,7 @@ class _HomeViewState extends ConsumerState<HomeView> with AutomaticKeepAliveClie
                   ),
                   ListTile(
                     leading: const Icon(Icons.folder),
-                    title: Transform.translate(offset: const Offset(0, -1.2), child: const Text('解析 URI')),
+                    title: Transform.translate(offset: const Offset(0, -1.2), child: Text("Parse URI".i18n)),
                     onTap: () {
                       Navigator.of(context).pop();
                       openUriDialog(context);

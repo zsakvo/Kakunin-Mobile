@@ -21,6 +21,9 @@ import 'firebase_options.dart';
 
 import 'package:timezone/data/latest.dart' as timezone;
 
+import 'utils/i18n.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 late final SharedPreferences spInstance;
 
 final GoogleSignIn googleSignIn = GoogleSignIn(
@@ -74,6 +77,17 @@ class MyApp extends HookConsumerWidget {
           supportMonet = true;
         }
         return MaterialApp.router(
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate
+          ],
+          supportedLocales: const [
+            Locale('en', "US"),
+            Locale('zh', "CN"),
+            Locale('zh', "TW"),
+            Locale('ja', "JP"),
+          ],
           theme: ThemeData(colorScheme: (monetEnabled ? lightDynamic : null) ?? defaultLightColor, useMaterial3: true),
           darkTheme:
               ThemeData(colorScheme: (monetEnabled ? darkDynamic : null) ?? defaultDarkColor, useMaterial3: true),
@@ -94,20 +108,4 @@ final monetEnableProvider = StateProvider((ref) => spInstance.getBool("dynamicCo
 
 bool supportMonet = false;
 
-// initGoogleAccount(context) async {
-//   bool isSignedIn = await googleSignIn.isSignedIn();
-//   Log.e(isSignedIn, 'isSignedIn');
-//   if (isSignedIn) {
-//     googleAccount = await googleSignIn.signInSilently();
-//     driveApi = DriveApi((await googleSignIn.authenticatedClient())!);
-//   } else {
-//     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//       content: Text(
-//         "Google 账户登录失败，请检查您的网络连接并重新登录",
-//         style: TextStyle(color: Theme.of(context).colorScheme.onErrorContainer),
-//       ),
-//       backgroundColor: Theme.of(context).colorScheme.errorContainer,
-//       behavior: SnackBarBehavior.floating,
-//     ));
-//   }
-// }
+Locale locale = Locale("zh", "CN");

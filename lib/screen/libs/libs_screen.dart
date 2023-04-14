@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:kakunin/utils/i18n.dart';
 
 class LibsView extends StatefulHookConsumerWidget {
   const LibsView({super.key});
@@ -35,7 +36,7 @@ class _LibsViewState extends ConsumerState<LibsView> {
     // }, [licensesFuture.data]);
     return Scaffold(
       appBar: AppBar(
-        title: const Text("第三方声明"),
+        title: Text("Third Party Disclaimer".i18n),
         elevation: 4,
       ),
       body: ListView.separated(

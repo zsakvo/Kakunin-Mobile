@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+import 'package:kakunin/utils/i18n.dart';
 
 void _openDialog(
     BuildContext context, String title, Widget content, void Function()? onPositive, void Function()? onNegative) {
@@ -12,8 +13,8 @@ void _openDialog(
         title: Text(title),
         content: content,
         actions: [
-          TextButton(onPressed: onNegative, child: const Text("取消")),
-          FilledButton(onPressed: onPositive, child: const Text("确定"))
+          TextButton(onPressed: onNegative, child: Text("Cancel".i18n)),
+          FilledButton(onPressed: onPositive, child: Text("OK".i18n))
         ],
       );
     },
@@ -24,7 +25,7 @@ void openMainColorPicker(BuildContext context, Color colorSeed, Function(ColorSw
     void Function()? onPositive, void Function()? onNegative) async {
   _openDialog(
       context,
-      "颜色选择器",
+      "Color picker".i18n,
       MaterialColorPicker(
           elevation: 0,
           spacing: 12,

@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/main.dart';
+import 'package:kakunin/utils/i18n.dart';
 import 'package:kakunin/utils/log.dart';
 import 'package:kakunin/utils/snackbar.dart';
 import 'package:local_auth/local_auth.dart';
@@ -40,7 +41,7 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
     // final monetSupport = ref.watch(monetEnableProvider);
     return Scaffold(
         appBar: AppBar(
-          title: Transform.translate(offset: const Offset(0, -2), child: const Text("设置")),
+          title: Transform.translate(offset: const Offset(0, -2), child: Text("Settings".i18n)),
           elevation: 4,
         ),
         body: CustomScrollView(
@@ -51,20 +52,20 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                 margin: const EdgeInsets.only(top: 16),
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 child: Text(
-                  "外观",
+                  "Appearance".i18n,
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
               ListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                title: Text("动态取色", style: titleStyle),
+                title: Text("Dynamic Color".i18n, style: titleStyle),
                 onTap: () {
                   if (!supportMonet) return;
                   ref.read(monetEnableProvider.notifier).state = !monetEnabled;
                   spInstance.setBool("dynamicColor", !monetEnabled);
                 },
                 subtitle: Text(
-                  "跟随系统桌面自动获取主题色",
+                  "Follow System Desktop for Theme Color".i18n,
                   style: subTitleStyle,
                 ),
                 trailing: Switch(
@@ -81,7 +82,7 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                   ? const SizedBox.shrink()
                   : ListTile(
                       contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                      title: Text("选取颜色", style: titleStyle),
+                      title: Text("Select Color".i18n, style: titleStyle),
                       onTap: () {
                         final bakColor = ref.read(colorThemeProvider.notifier).state;
                         final colorSeed = Color(spInstance.getInt("colorSeed") ?? 4294198070);
@@ -96,7 +97,7 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                         });
                       },
                       subtitle: Text(
-                        "手动选择一个色彩，这将作为种子被应用",
+                        "Manually Select a Color as Seed".i18n,
                         style: subTitleStyle,
                       ),
                     ),
@@ -104,15 +105,15 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                 margin: const EdgeInsets.only(top: 16),
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 child: Text(
-                  "数据",
+                  "Data".i18n,
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
               ListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                title: Text("安全认证", style: titleStyle),
+                title: Text("Security Authentication".i18n, style: titleStyle),
                 subtitle: Text(
-                  "启动时进行安全验证",
+                  "Perform Security Verification on Startup".i18n,
                   style: subTitleStyle,
                 ),
                 trailing: Switch(
@@ -124,7 +125,7 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                         needAuth.value = !needAuth.value;
                       }
                     } on PlatformException {
-                      showErrorSnackBar("您的系统没有注册任何认证方式");
+                      showErrorSnackBar("System has not registered any authentication method".i18n);
                     }
                   },
                   // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
@@ -136,15 +137,15 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                       needAuth.value = !needAuth.value;
                     }
                   } on PlatformException {
-                    showErrorSnackBar("您的系统没有注册任何认证方式");
+                    showErrorSnackBar("System has not registered any authentication method".i18n);
                   }
                 },
               ),
               ListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                title: Text("备份和恢复", style: titleStyle),
+                title: Text("Backup and Restore".i18n, style: titleStyle),
                 subtitle: Text(
-                  "数据上云，减少意外丢失风险",
+                  "Data Cloud Backup to Reduce Risk of Accidental Loss".i18n,
                   style: subTitleStyle,
                 ),
                 onTap: () {
@@ -155,15 +156,15 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                 margin: const EdgeInsets.only(top: 16),
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 child: Text(
-                  "关于",
+                  "About".i18n,
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
               ListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                title: Text("开源许可", style: titleStyle),
+                title: Text("Open Source License".i18n, style: titleStyle),
                 subtitle: Text(
-                  "没有他们就没有我 :)",
+                  "No Them, No Me".i18n,
                   style: subTitleStyle,
                 ),
                 onTap: () {
@@ -172,9 +173,9 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
               ),
               ListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
-                title: Text("项目主页", style: titleStyle),
+                title: Text("Project Homepage".i18n, style: titleStyle),
                 subtitle: Text(
-                  "来看看不知所云的源代码，或者请我喝咖啡？",
+                  "View Source Code and Buy Me a Coffee".i18n,
                   style: subTitleStyle,
                 ),
                 onTap: () async {
@@ -186,7 +187,7 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                   } catch (err) {
                     Log.e(err);
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: const Text("链接访问失败"),
+                      content: Text("Link access failed".i18n),
                       backgroundColor: Theme.of(context).colorScheme.error,
                       behavior: SnackBarBehavior.floating,
                     ));
