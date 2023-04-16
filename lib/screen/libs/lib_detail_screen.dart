@@ -32,7 +32,7 @@ class LibDetailView extends HookConsumerWidget {
       }
     }
 
-    final licenseString = useFuture(useMemoized(() => getLicenseString()), initialData: "");
+    final licenseString = useFuture(useMemoized(() => getLicenseString()), initialData: null);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -46,10 +46,22 @@ class LibDetailView extends HookConsumerWidget {
           child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
-          child: Text(
-            licenseString.data!,
-            style: const TextStyle(fontSize: 16),
-          ),
+          child: licenseString.data == null
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 2 / 3,
+                  child: const Center(
+                    child: SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                )
+              : Text(
+                  licenseString.data!,
+                  style: const TextStyle(fontSize: 16),
+                ),
         ),
       )),
     );
