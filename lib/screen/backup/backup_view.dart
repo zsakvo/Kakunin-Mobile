@@ -10,8 +10,6 @@ import 'package:kakunin/utils/cloud.dart';
 import 'package:kakunin/utils/i18n.dart';
 import 'package:kakunin/utils/parse.dart';
 
-import '../../utils/log.dart';
-
 class BackupView extends StatefulHookConsumerWidget {
   const BackupView({super.key});
 

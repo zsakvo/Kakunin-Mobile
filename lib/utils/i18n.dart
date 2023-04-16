@@ -190,6 +190,14 @@ extension Localization on String {
       "zh_cn": "密钥不是有效的 Base32 编码",
       "zh_tw": "金鑰不是有效的 Base32 編碼",
       "ja_jp": "アクセスキーは有効な Base32 エンコーディングではありません"
+    },
+    "Select Image": {"en_us": "Select Image", "zh_cn": "选取图像", "zh_tw": "選取圖像", "ja_jp": "画像を選択する"},
+    "Switch Language": {"en_us": "Switch Language", "zh_cn": "切换语言", "zh_tw": "切換語言", "ja_jp": "言語を切り替える"},
+    "The default setting is usually fine": {
+      "en_us": "The default setting is usually fine",
+      "zh_cn": "正常来说，默认就好",
+      "zh_tw": "通常情況下，預設值就足夠了",
+      "ja_jp": "通常、デフォルトの設定が適切です"
     }
   });
 

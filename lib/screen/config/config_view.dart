@@ -1,10 +1,11 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, constant_identifier_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:i18n_extension/i18n_widget.dart';
 import 'package:kakunin/main.dart';
 import 'package:kakunin/utils/i18n.dart';
 import 'package:kakunin/utils/log.dart';
@@ -13,6 +14,10 @@ import 'package:local_auth/local_auth.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'components/color.dart';
+
+enum Language { en, cn, tw, jp }
+
+const LanguageStrings = ["English", "简体中文", "繁體中文", "日本語"];
 
 class ConfigView extends StatefulHookConsumerWidget {
   const ConfigView({super.key});
@@ -56,10 +61,16 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
-              ListTile(
+              SwitchListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                 title: Text("Dynamic Color".i18n, style: titleStyle),
-                onTap: () {
+                // onTap: () {
+                //   if (!supportMonet) return;
+                //   ref.read(monetEnableProvider.notifier).state = !monetEnabled;
+                //   spInstance.setBool("dynamicColor", !monetEnabled);
+                // },
+                value: monetEnabled,
+                onChanged: (value) {
                   if (!supportMonet) return;
                   ref.read(monetEnableProvider.notifier).state = !monetEnabled;
                   spInstance.setBool("dynamicColor", !monetEnabled);
@@ -68,15 +79,15 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                   "Follow System Desktop for Theme Color".i18n,
                   style: subTitleStyle,
                 ),
-                trailing: Switch(
-                  value: monetEnabled,
-                  onChanged: (value) {
-                    if (!supportMonet) return;
-                    ref.read(monetEnableProvider.notifier).state = !monetEnabled;
-                    spInstance.setBool("dynamicColor", !monetEnabled);
-                  },
-                  // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
-                ),
+                // trailing: Switch(
+                //   value: monetEnabled,
+                //   onChanged: (value) {
+                //     if (!supportMonet) return;
+                //     ref.read(monetEnableProvider.notifier).state = !monetEnabled;
+                //     spInstance.setBool("dynamicColor", !monetEnabled);
+                //   },
+                //   // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
+                // ),
               ),
               monetEnabled
                   ? const SizedBox.shrink()
@@ -101,6 +112,17 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                         style: subTitleStyle,
                       ),
                     ),
+              ListTile(
+                contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
+                title: Text("Switch Language".i18n, style: titleStyle),
+                onTap: () {
+                  switchLanguage(ref);
+                },
+                subtitle: Text(
+                  "The default setting is usually fine".i18n,
+                  style: subTitleStyle,
+                ),
+              ),
               Container(
                 margin: const EdgeInsets.only(top: 16),
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -109,28 +131,15 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
-              ListTile(
+              SwitchListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                 title: Text("Security Authentication".i18n, style: titleStyle),
                 subtitle: Text(
                   "Perform Security Verification on Startup".i18n,
                   style: subTitleStyle,
                 ),
-                trailing: Switch(
-                  value: needAuth.value,
-                  onChanged: (value) async {
-                    try {
-                      final bool didAuthenticate = await auth.authenticate(localizedReason: '请验证您的身份信息');
-                      if (didAuthenticate) {
-                        needAuth.value = !needAuth.value;
-                      }
-                    } on PlatformException {
-                      showErrorSnackBar("System has not registered any authentication method".i18n);
-                    }
-                  },
-                  // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
-                ),
-                onTap: () async {
+                value: needAuth.value,
+                onChanged: (value) async {
                   try {
                     final bool didAuthenticate = await auth.authenticate(localizedReason: '请验证您的身份信息');
                     if (didAuthenticate) {
@@ -140,6 +149,20 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                     showErrorSnackBar("System has not registered any authentication method".i18n);
                   }
                 },
+                // trailing: Switch(
+
+                //   // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
+                // ),
+                // onTap: () async {
+                //   try {
+                //     final bool didAuthenticate = await auth.authenticate(localizedReason: '请验证您的身份信息');
+                //     if (didAuthenticate) {
+                //       needAuth.value = !needAuth.value;
+                //     }
+                //   } on PlatformException {
+                //     showErrorSnackBar("System has not registered any authentication method".i18n);
+                //   }
+                // },
               ),
               ListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
@@ -197,5 +220,66 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
             ]))
           ],
         ));
+  }
+
+  void switchLanguage(WidgetRef ref) {
+    // const locales = [
+    //   Locale('en', "US"),
+    //   Locale('zh', "CN"),
+    //   Locale('zh', "TW"),
+    //   Locale('ja', "JP"),
+    // ];
+    // int val = ref.watch(localeProvider);
+    int val = spInstance.getInt("locale") ?? 1;
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (_) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.all(0.0),
+              title: Text("Switch Language".i18n),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      int val = spInstance.getInt("locale") ?? 1;
+                      I18n.of(context).locale = locales[val];
+                      // ref.read(localeProvider.notifier).state = val;
+                      GoRouter.of(context).pop();
+                    },
+                    child: Text("Cancel".i18n)),
+                TextButton(
+                    onPressed: () {
+                      // ref.read(cloudAccountProvider.notifier).checkLogin(CloudAccountType.values[val]);
+                      // accountType.value = val;
+                      spInstance.setInt("locale", val);
+                      GoRouter.of(context).pop();
+                    },
+                    child: Text("OK".i18n))
+              ],
+              content: Padding(
+                padding: const EdgeInsets.only(top: 12, bottom: 12),
+                child: Wrap(
+                    children: Language.values
+                        .map((e) => RadioListTile(
+                              value: e.index,
+                              groupValue: val,
+                              title: Text(LanguageStrings[e.index]),
+                              onChanged: (value) {
+                                setState(() {
+                                  val = value!;
+                                  I18n.of(context).locale = locales[val];
+                                  // ref.read(localeProvider.notifier).state = value;
+                                });
+                              },
+                            ))
+                        .toList()),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

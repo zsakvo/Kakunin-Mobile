@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 // import 'package:go_router_flow/go_router_flow.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/screen/home/home_model.dart';
+import 'package:kakunin/utils/i18n.dart';
 import 'package:kakunin/utils/parse.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:image_picker/image_picker.dart';
@@ -87,7 +88,7 @@ class _ScanViewState extends ConsumerState<ScanView> {
                           }
                         }
                       },
-                      label: const Text("选取图像"),
+                      label: Text("Select Image".i18n),
                       icon: const Icon(Icons.image),
                     )
                   ],

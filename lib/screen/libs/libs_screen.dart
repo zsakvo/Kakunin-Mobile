@@ -1,11 +1,46 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/utils/i18n.dart';
+
+const libs = [
+  'cupertino_icons',
+  'go_router',
+  'otp',
+  'flutter_hooks',
+  'isar',
+  'isar_flutter_libs',
+  'logger',
+  'uuid',
+  'timezone',
+  'dynamic_color',
+  'hooks_riverpod',
+  'riverpod_annotation',
+  'shared_preferences',
+  'equatable',
+  'clipboard',
+  'mobile_scanner',
+  'image_picker',
+  'flutter_material_color_picker',
+  'base32',
+  'url_launcher',
+  'protobuf',
+  'local_auth',
+  'flutter_exit_app',
+  'googleapis',
+  'google_sign_in',
+  'firebase_core',
+  'extension_google_sign_in_as_googleapis_auth',
+  'fast_rsa',
+  'path_provider',
+  'file_picker',
+  'webdav_client',
+  'i18n_extension',
+  'flutter_localizations',
+  'http',
+  'html_unescape'
+];
 
 class LibsView extends StatefulHookConsumerWidget {
   const LibsView({super.key});
@@ -17,16 +52,16 @@ class LibsView extends StatefulHookConsumerWidget {
 class _LibsViewState extends ConsumerState<LibsView> {
   @override
   Widget build(BuildContext context) {
-    Future<List<String>> getLicenseFiles() async {
-      final manifestContent = await rootBundle.loadString('AssetManifest.json');
-      final Map<String, dynamic> manifestMap = json.decode(manifestContent);
-      return manifestMap.keys
-          .where((element) => element.contains("licenses"))
-          .map((e) => e.replaceAll("assets/licenses/", ""))
-          .toList();
-    }
+    // Future<List<String>> getLicenseFiles() async {
+    //   final manifestContent = await rootBundle.loadString('AssetManifest.json');
+    //   final Map<String, dynamic> manifestMap = json.decode(manifestContent);
+    //   return manifestMap.keys
+    //       .where((element) => element.contains("licenses"))
+    //       .map((e) => e.replaceAll("assets/licenses/", ""))
+    //       .toList();
+    // }
 
-    final licensesFuture = useFuture<List<String>>(useMemoized(() => getLicenseFiles()), initialData: []);
+    // final licensesFuture = useFuture<List<String>>(useMemoized(() => getLicenseFiles()), initialData: []);
     // useEffect(() {
     //   final licenses = licensesFuture.data;
     //   if (licenses != null) {
@@ -41,7 +76,7 @@ class _LibsViewState extends ConsumerState<LibsView> {
       ),
       body: ListView.separated(
         itemBuilder: (context, index) {
-          String item = licensesFuture.data![index];
+          String item = libs[index];
           return ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 4),
             title: Text(
@@ -54,7 +89,7 @@ class _LibsViewState extends ConsumerState<LibsView> {
             },
           );
         },
-        itemCount: licensesFuture.data!.length,
+        itemCount: libs.length,
         separatorBuilder: (context, index) {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
