@@ -60,10 +60,16 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
-              ListTile(
+              SwitchListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                 title: Text("Dynamic Color".i18n, style: titleStyle),
-                onTap: () {
+                // onTap: () {
+                //   if (!supportMonet) return;
+                //   ref.read(monetEnableProvider.notifier).state = !monetEnabled;
+                //   spInstance.setBool("dynamicColor", !monetEnabled);
+                // },
+                value: monetEnabled,
+                onChanged: (value) {
                   if (!supportMonet) return;
                   ref.read(monetEnableProvider.notifier).state = !monetEnabled;
                   spInstance.setBool("dynamicColor", !monetEnabled);
@@ -72,15 +78,15 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                   "Follow System Desktop for Theme Color".i18n,
                   style: subTitleStyle,
                 ),
-                trailing: Switch(
-                  value: monetEnabled,
-                  onChanged: (value) {
-                    if (!supportMonet) return;
-                    ref.read(monetEnableProvider.notifier).state = !monetEnabled;
-                    spInstance.setBool("dynamicColor", !monetEnabled);
-                  },
-                  // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
-                ),
+                // trailing: Switch(
+                //   value: monetEnabled,
+                //   onChanged: (value) {
+                //     if (!supportMonet) return;
+                //     ref.read(monetEnableProvider.notifier).state = !monetEnabled;
+                //     spInstance.setBool("dynamicColor", !monetEnabled);
+                //   },
+                //   // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
+                // ),
               ),
               monetEnabled
                   ? const SizedBox.shrink()
@@ -124,28 +130,15 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ),
-              ListTile(
+              SwitchListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                 title: Text("Security Authentication".i18n, style: titleStyle),
                 subtitle: Text(
                   "Perform Security Verification on Startup".i18n,
                   style: subTitleStyle,
                 ),
-                trailing: Switch(
-                  value: needAuth.value,
-                  onChanged: (value) async {
-                    try {
-                      final bool didAuthenticate = await auth.authenticate(localizedReason: '请验证您的身份信息');
-                      if (didAuthenticate) {
-                        needAuth.value = !needAuth.value;
-                      }
-                    } on PlatformException {
-                      showErrorSnackBar("System has not registered any authentication method".i18n);
-                    }
-                  },
-                  // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
-                ),
-                onTap: () async {
+                value: needAuth.value,
+                onChanged: (value) async {
                   try {
                     final bool didAuthenticate = await auth.authenticate(localizedReason: '请验证您的身份信息');
                     if (didAuthenticate) {
@@ -155,6 +148,20 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
                     showErrorSnackBar("System has not registered any authentication method".i18n);
                   }
                 },
+                // trailing: Switch(
+
+                //   // onChanged: (value) => setSpBool("dynamicColor", !value, dynamicColor),
+                // ),
+                // onTap: () async {
+                //   try {
+                //     final bool didAuthenticate = await auth.authenticate(localizedReason: '请验证您的身份信息');
+                //     if (didAuthenticate) {
+                //       needAuth.value = !needAuth.value;
+                //     }
+                //   } on PlatformException {
+                //     showErrorSnackBar("System has not registered any authentication method".i18n);
+                //   }
+                // },
               ),
               ListTile(
                 contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
