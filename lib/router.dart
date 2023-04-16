@@ -62,13 +62,6 @@ class AppPages {
   ]);
 }
 
-getI18nWidget({required Widget child}) {
-  return I18n(
-    initialLocale: locale,
-    child: child,
-  );
-}
-
 class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }

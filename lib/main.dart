@@ -53,6 +53,13 @@ void main() async {
   runApp(const ProviderScope(child: MyApp()));
 }
 
+const locales = [
+  Locale('en', "US"),
+  Locale('zh', "CN"),
+  Locale('zh', "TW"),
+  Locale('ja', "JP"),
+];
+
 class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
   @override
@@ -61,7 +68,8 @@ class MyApp extends HookConsumerWidget {
     final monetEnabled = ref.watch(monetEnableProvider);
     final defaultLightColor = ColorScheme.fromSeed(seedColor: colorSeed, brightness: Brightness.light);
     final defaultDarkColor = ColorScheme.fromSeed(seedColor: colorSeed, brightness: Brightness.dark);
-    final locale = ref.watch(localeProvider);
+    final locale = locales[spInstance.getInt("locale") ?? 1];
+    // final locale = ref.watch(localeProvider);
     // final currentLocale = useState(getLocale(locale));
     useEffect(() {
       // initGoogleAccount(context);
@@ -74,7 +82,7 @@ class MyApp extends HookConsumerWidget {
       return null;
     }, []);
     return I18n(
-      initialLocale: getLocale(locale),
+      initialLocale: locale,
       child: DynamicColorBuilder(
         builder: (lightDynamic, darkDynamic) {
           if (lightDynamic == null || darkDynamic == null) {
@@ -116,12 +124,12 @@ final monetEnableProvider = StateProvider((ref) => spInstance.getBool("dynamicCo
 
 bool supportMonet = false;
 
-Locale locale = Locale("zh", "CN");
+// Locale locale = Locale("zh", "CN");
 
-final localeProvider = StateProvider((ref) => spInstance.getInt("locale") ?? 1);
+// final localeProvider = StateProvider((ref) => spInstance.getInt("locale") ?? 1);
 
-getLocale(int locale) {
-  Log.e(locale, "getLocal");
-  final arr = [const Locale("en", "US"), const Locale("zh", "CN"), const Locale("zh", "TW"), const Locale("ja", "JP")];
-  return arr[locale];
-}
+// getLocale(int locale) {
+//   Log.e(locale, "getLocal");
+//   final arr = [const Locale("en", "US"), const Locale("zh", "CN"), const Locale("zh", "TW"), const Locale("ja", "JP")];
+//   return arr[locale];
+// }
