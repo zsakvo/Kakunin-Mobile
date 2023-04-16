@@ -13,7 +13,6 @@ import 'package:kakunin/data/models/verification_item.dart';
 import 'package:kakunin/provider.dart';
 import 'package:kakunin/router.dart';
 import 'package:kakunin/utils/color.dart';
-import 'package:kakunin/utils/log.dart';
 
 import 'package:kakunin/utils/scroll.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,7 +22,6 @@ import 'firebase_options.dart';
 
 import 'package:timezone/data/latest.dart' as timezone;
 
-import 'utils/i18n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 late final SharedPreferences spInstance;

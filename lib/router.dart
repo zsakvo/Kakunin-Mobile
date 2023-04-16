@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:i18n_extension/i18n_widget.dart';
+
 import 'package:kakunin/data/models/verification_item.dart';
-import 'package:kakunin/main.dart';
+
 import 'package:kakunin/screen/backup/backup_view.dart';
 import 'package:kakunin/screen/backup/webdav_path_view.dart';
 import 'package:kakunin/screen/backup/webdav_view.dart';
@@ -13,7 +13,6 @@ import 'package:kakunin/screen/home/home_view.dart';
 import 'package:kakunin/screen/libs/lib_detail_screen.dart';
 import 'package:kakunin/screen/libs/libs_screen.dart';
 import 'package:kakunin/screen/scan/scan_view.dart';
-import 'package:timezone/timezone.dart';
 
 class AppPages {
   static GoRouter router = GoRouter(navigatorKey: NavigationService.navigatorKey, routes: [
