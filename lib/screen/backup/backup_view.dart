@@ -184,18 +184,18 @@ class _BackupViewState extends ConsumerState<BackupView> {
                           margin: const EdgeInsets.only(top: 16),
                           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                           child: Text(
-                            "云端",
+                            "Cloud".i18n,
                             style: TextStyle(color: Theme.of(context).colorScheme.primary),
                           ),
                         ),
                         ListTile(
                           contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                           title: Text(
-                            "备份数据",
+                            "Backup Data".i18n,
                             style: titleStyle,
                           ),
                           subtitle: Text(
-                            "上云有风险，隐私自己管 :_)",
+                            "Uploading data to the cloud carries risks. Please manage your privacy.".i18n,
                             style: subTitleStyle,
                           ),
                           onTap: () async {
@@ -205,7 +205,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                         ListTile(
                           contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                           title: Text(
-                            "恢复数据",
+                            "Restore Data".i18n,
                             style: titleStyle,
                           ),
                           subtitle: Text(
@@ -213,12 +213,12 @@ class _BackupViewState extends ConsumerState<BackupView> {
                               switch (accountType.value) {
                                 case 0:
                                   return cloudAccount.gFile == null
-                                      ? "暂未找到备份文件"
-                                      : "文件大小：${Parse.formatFileSize(cloudAccount.gFile!.size)}\n修改时间：${cloudAccount.gFile!.modifiedTime!.toLocal()}";
+                                      ? "Backup file not found".i18n
+                                      : "${"File Size".i18n}：${Parse.formatFileSize(cloudAccount.gFile!.size)}\n${"Modification Time".i18n}：${cloudAccount.gFile!.modifiedTime!.toLocal()}";
                                 default:
                                   return cloudAccount.davFileTime == null
-                                      ? "未找到备份文件"
-                                      : "文件大小：${cloudAccount.davFileSize}\n修改时间：${cloudAccount.davFileTime}";
+                                      ? "Backup file not found".i18n
+                                      : "${"File Size".i18n}：${cloudAccount.davFileSize}\n${"Modification Time".i18n}：${cloudAccount.davFileTime}";
                               }
                             })(),
                             style: subTitleStyle,
@@ -263,7 +263,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                   subtitle: Text(
                     cloudAccount.localDir != null
                         ? "${"Currently backed up in".i18n} ${cloudAccount.localDir}"
-                        : "尚未选择备份位置",
+                        : "Backup location not selected yet".i18n,
                     style: subTitleStyle,
                   ),
                   onTap: () async {
@@ -284,23 +284,23 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     ref.read(cloudAccountProvider.notifier).restoreLocal();
                   },
                 ),
-                const Divider(
-                  indent: 16,
-                  endIndent: 16,
-                ),
-                ListTile(
-                  leading: const Icon(Icons.help_outline_outlined),
-                  horizontalTitleGap: 0,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  subtitle: Text(
-                    "Only supports exporting data from the application itself".i18n,
-                    textAlign: TextAlign.justify,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
-                      fontSize: 13,
-                    ),
-                  ),
-                ),
+                // const Divider(
+                //   indent: 16,
+                //   endIndent: 16,
+                // ),
+                // ListTile(
+                //   leading: const Icon(Icons.help_outline_outlined),
+                //   horizontalTitleGap: 0,
+                //   contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                //   subtitle: Text(
+                //     "Only supports exporting data from the application itself".i18n,
+                //     textAlign: TextAlign.justify,
+                //     style: TextStyle(
+                //       color: Theme.of(context).colorScheme.onBackground.withOpacity(0.7),
+                //       fontSize: 13,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           )
