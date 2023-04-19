@@ -198,7 +198,30 @@ extension Localization on String {
       "zh_cn": "正常来说，默认就好",
       "zh_tw": "通常情況下，預設值就足夠了",
       "ja_jp": "通常、デフォルトの設定が適切です"
-    }
+    },
+    "Backup location not selected yet": {
+      "en_us": "Backup location not selected yet",
+      "zh_cn": "尚未选择备份位置",
+      "zh_tw": "尚未選擇備份位置",
+      "ja_jp": "バックアップ先がまだ選択されていません"
+    },
+    "Cloud": {"en_us": "Cloud", "zh_cn": "云端", "zh_tw": "雲端", "ja_jp": "クラウド"},
+    "Backup Data": {"en_us": "Backup Data", "zh_cn": "备份数据", "zh_tw": "備份資料", "ja_jp": "データのバックアップ"},
+    "Uploading data to the cloud carries risks. Please manage your privacy.": {
+      "en_us": "Uploading data to the cloud carries risks. Please manage your privacy.",
+      "zh_cn": "将数据上传到云端存在风险，请自行管理您的隐私。",
+      "zh_tw": "上傳數據到雲端存在風險，請自行管理您的隱私。",
+      "ja_jp": "クラウドにデータをアップロードすることにはリスクがあります。プライバシーに配慮してください。"
+    },
+    "Restore Data": {"en_us": "Restore Data", "zh_cn": "恢复数据", "zh_tw": "還原資料", "ja_jp": "データを復元する"},
+    "Backup file not found": {
+      "en_us": "Backup file not found",
+      "zh_cn": "未找到备份文件",
+      "zh_tw": "找不到備份檔案",
+      "ja_jp": "バックアップファイルが見つかりません"
+    },
+    "File Size": {"en_us": "File Size", "zh_cn": "文件大小", "zh_tw": "檔案大小", "ja_jp": "ファイルサイズ"},
+    "Modification Time": {"en_us": "Modification Time", "zh_cn": "修改时间", "zh_tw": "修改時間", "ja_jp": "更新時間"},
   });
 
   String get i18n => localize(this, _t);
