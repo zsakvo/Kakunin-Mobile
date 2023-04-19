@@ -232,7 +232,7 @@ class _ConfigViewState extends ConsumerState<ConfigView> {
     // int val = ref.watch(localeProvider);
     int val = spInstance.getInt("locale") ?? 1;
     showDialog(
-      barrierDismissible: true,
+      barrierDismissible: false,
       context: context,
       builder: (_) {
         return StatefulBuilder(
