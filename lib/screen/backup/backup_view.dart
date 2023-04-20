@@ -147,12 +147,12 @@ class _BackupViewState extends ConsumerState<BackupView> {
                     ? ListTile(
                         contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),
                         title: Text(
-                          "Storage location".i18n,
+                          "Current Storage Location".i18n,
                           style: titleStyle,
                         ),
                         subtitle: Text(
                           // "设定您在WebDav上的默认备份路径",
-                          "Current storage path".i18n + cloudAccount.davPath!,
+                          "Current storage path".i18n + (cloudAccount.davPath ?? ""),
                           style: subTitleStyle,
                         ),
                         onTap: () async {
