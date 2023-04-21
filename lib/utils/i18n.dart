@@ -222,6 +222,12 @@ extension Localization on String {
     },
     "File Size": {"en_us": "File Size", "zh_cn": "文件大小", "zh_tw": "檔案大小", "ja_jp": "ファイルサイズ"},
     "Modification Time": {"en_us": "Modification Time", "zh_cn": "修改时间", "zh_tw": "修改時間", "ja_jp": "更新時間"},
+    "Please log in to WebDAV first": {
+      "en_us": "Please log in to WebDAV first",
+      "zh_cn": "请先登录到 WebDAV",
+      "zh_tw": "請先登錄到 WebDAV",
+      "ja_jp": "最初に WebDAV にログインしてください"
+    }
   });
 
   String get i18n => localize(this, _t);

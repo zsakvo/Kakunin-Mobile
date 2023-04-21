@@ -19,6 +19,7 @@ import 'package:kakunin/main.dart';
 import 'package:kakunin/router.dart';
 import 'package:kakunin/screen/home/home_model.dart';
 import 'package:kakunin/utils/encode.dart';
+import 'package:kakunin/utils/i18n.dart';
 import 'package:kakunin/utils/log.dart';
 import 'package:kakunin/utils/parse.dart';
 import 'package:kakunin/utils/snackbar.dart';
@@ -376,7 +377,12 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
   }
 
   setWebDavPath(context) {
-    GoRouter.of(context).push("/webdavPath");
+    final davUrl = spInstance.getString("davUrl");
+    if (davUrl != null) {
+      GoRouter.of(context).push("/webdavPath");
+    } else {
+      showErrorSnackBar("Please log in to WebDAV first".i18n);
+    }
   }
 }
 
