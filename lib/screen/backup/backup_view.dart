@@ -152,7 +152,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                         ),
                         subtitle: Text(
                           // "设定您在WebDav上的默认备份路径",
-                          "Current storage path".i18n + (cloudAccount.davPath ?? ""),
+                          "Current storage path".i18n + (cloudAccount.davPath ?? "/"),
                           style: subTitleStyle,
                         ),
                         onTap: () async {
