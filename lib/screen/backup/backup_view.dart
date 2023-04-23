@@ -269,6 +269,9 @@ class _BackupViewState extends ConsumerState<BackupView> {
                   onTap: () async {
                     ref.read(cloudAccountProvider.notifier).backUpLocal();
                   },
+                  onLongPress: () {
+                    ref.read(cloudAccountProvider.notifier).resetLocalDir();
+                  },
                 ),
                 ListTile(
                   contentPadding: const EdgeInsets.only(bottom: 8, left: 16, right: 16),

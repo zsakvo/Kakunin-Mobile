@@ -316,6 +316,11 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
     }
   }
 
+  resetLocalDir() async {
+    var res = await FilePicker.platform.getDirectoryPath();
+    state = state.copyWith(localDir: res);
+  }
+
   restoreGoogle() async {
     final File? gFile = state.gFile;
     if (gFile != null) {
