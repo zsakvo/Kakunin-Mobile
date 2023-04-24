@@ -110,7 +110,7 @@ class MainActivity : FlutterActivity() {
             // return directory uri
             result.success(file.uri.toString())
         } catch (e: Throwable) {
-            Log.e("MainActivity::createDirectory", "Unhandled error", e)
+            Log.e("createDirectory", "Unhandled error", e)
             result.error(e.javaClass.name, e.message, null)
         }
     }

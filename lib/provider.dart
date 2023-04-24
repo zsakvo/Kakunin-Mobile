@@ -18,6 +18,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:kakunin/main.dart';
 import 'package:kakunin/router.dart';
 import 'package:kakunin/screen/home/home_model.dart';
+import 'package:kakunin/utils/android_file.dart';
 import 'package:kakunin/utils/encode.dart';
 import 'package:kakunin/utils/i18n.dart';
 import 'package:kakunin/utils/log.dart';
@@ -317,7 +318,9 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
   }
 
   resetLocalDir() async {
-    var res = await FilePicker.platform.getDirectoryPath();
+    // var res = await FilePicker.platform.getDirectoryPath();
+    AndroidInterface aif = AndroidInterface();
+    var res = await aif.selectDirectory();
     state = state.copyWith(localDir: res);
   }
 
