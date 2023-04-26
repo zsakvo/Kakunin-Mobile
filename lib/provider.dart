@@ -174,22 +174,24 @@ class CloudAccountNotifier extends StateNotifier<CloudAccount> {
 
   checkDavToken() async {
     accountType = CloudAccountType.WebDav;
-    final url = spInstance.getString("davUrl")!;
-    final account = spInstance.getString("davAccount")!;
-    final password = spInstance.getString("davPassword")!;
+    final url = spInstance.getString("davUrl");
+    final account = spInstance.getString("davAccount");
+    final password = spInstance.getString("davPassword");
     final davPath = spInstance.getString("davPath") ?? "/";
-    davClient = wd.newClient(
-      url,
-      user: account,
-      password: password,
-      debug: true,
-    )..setHeaders({'accept-charset': 'utf-8'});
-    try {
-      await davClient.readDir(davPath);
-      state = state.copyWith(isLogin: true, davPath: davPath, davUrl: url);
-      searchBackUpFile();
-    } catch (err) {
-      Log.e(err);
+    if (url != null) {
+      davClient = wd.newClient(
+        url,
+        user: account!,
+        password: password!,
+        debug: true,
+      )..setHeaders({'accept-charset': 'utf-8'});
+      try {
+        await davClient.readDir(davPath);
+        state = state.copyWith(isLogin: true, davPath: davPath, davUrl: url);
+        searchBackUpFile();
+      } catch (err) {
+        Log.e(err);
+      }
     }
   }
 
