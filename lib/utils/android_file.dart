@@ -40,7 +40,9 @@ class AndroidInterface {
         'bytes': bytes,
         'overwrite': overwrite,
       });
-      if (result != null || returnVoid) return result;
+      if (result != null || returnVoid) {
+        return {"error": null, "result": result};
+      }
 
       return "unknown";
     } on PlatformException catch (e) {
