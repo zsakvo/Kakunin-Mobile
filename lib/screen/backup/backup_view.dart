@@ -262,7 +262,7 @@ class _BackupViewState extends ConsumerState<BackupView> {
                   ),
                   subtitle: Text(
                     cloudAccount.localDir != null
-                        ? "${"Currently backed up in".i18n} ${cloudAccount.localDir}"
+                        ? "${"Currently backed up in".i18n} ${cloudAccount.localDir}\n${"Long press to switch output directory".i18n}"
                         : "Backup location not selected yet".i18n,
                     style: subTitleStyle,
                   ),

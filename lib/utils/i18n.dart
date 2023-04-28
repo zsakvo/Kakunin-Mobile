@@ -227,6 +227,12 @@ extension Localization on String {
       "zh_cn": "请先登录到 WebDAV",
       "zh_tw": "請先登錄到 WebDAV",
       "ja_jp": "最初に WebDAV にログインしてください"
+    },
+    "Long press to switch output directory": {
+      "en_us": "Long press to switch output directory",
+      "zh_cn": "长按切换输出目录",
+      "zh_tw": "長按切換輸出目錄",
+      "ja_jp": "出力ディレクトリを切り替えるには長押ししてください"
     }
   });
 
